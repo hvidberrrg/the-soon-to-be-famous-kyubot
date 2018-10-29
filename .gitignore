@@ -1,0 +1,4 @@
+.idea/
+*.iml
+src/main/webapp/WEB-INF/classes/assistant.properties
+target/

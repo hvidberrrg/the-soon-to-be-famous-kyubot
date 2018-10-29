@@ -1,0 +1,4 @@
+cron:
+- description: "Keep Watson Assistant account alive"
+  url: /cron/keepAlive
+  schedule: every day 01:00

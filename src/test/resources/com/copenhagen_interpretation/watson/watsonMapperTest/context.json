@@ -1,0 +1,22 @@
+{
+  "conversation_id": "a96ec62f-773c-4e84-8be9-f9dbca9f83d0",
+  "system": {
+    "dialog_stack": [
+      {
+        "dialog_node": "root"
+      }
+    ],
+    "dialog_turn_counter": 1,
+    "dialog_request_counter": 1,
+    "_node_output_map": {
+      "greeting": {
+        "0": [
+          0,
+          0
+        ]
+      }
+    },
+    "branch_exited": true,
+    "branch_exited_reason": "completed"
+  }
+}

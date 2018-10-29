@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>The soon to be famous KyuBOT</title>
+    <!-- jQuery -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- KyuBOT -->
+    <link rel="stylesheet" type="text/css" href="/css/kyubot.css"/>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112452759-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-112452759-2');
+    </script>
+</head>
+<body>
+
+    <div class="conversation">
+        <form class="chat" action="/conversation" method="post" id="kyubotQuery">
+            <div class="messages">&nbsp;</div>
+            <input type="text" id="inputText" name="input" placeholder="Type your message here...">
+            <input type="hidden" id="watson_context" name="context" value="">
+            <input type="submit" value="Send">
+        </form>
+    </div>
+
+    <script>
+        // Start the conversation as soon as the document is ready
+        $(document).ready(function () {
+            addTypingIndicator();
+            $.post("/conversation",
+                function (data) {
+                    updateConversation(data);
+                }
+            );
+        });
+
+        // Submit messages to the KyuBOT
+        $("#kyubotQuery").submit(function (e) {
+            var form = $(this);
+            var url = form.attr('action');
+            // serializes the form's elements before clearing the input
+            var formData = form.serialize();
+
+            // Add the user's message to the conversation
+            addMessage("user", $("#inputText").val());
+            // Clear input
+            $('#inputText').val([]);
+            // Indicate that the KyuBOT is preparing a reply
+            addTypingIndicator();
+
+            // Get the KyuBOT's reply and update the conversation
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                success: function (data) {
+                    updateConversation(data);
+                }
+            });
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+        });
+
+        function updateConversation(data) {
+            // Store the Watson context
+            $('#watson_context').val(JSON.stringify(data.context));
+            // Remove the animation indicating that the KyuBOT is "typing"
+            removeTypingIndicator();
+            // Add the KyuBOT's reply to the conversation
+            addMessage("kyubot", data.output.text[0])
+        }
+
+        function addMessage(type, message) {
+            $(".messages").append("<div class='message'><div class='" + type + "'>" + message + "</div></div>");
+            scrollToBottom();
+        }
+
+        function addTypingIndicator() {
+            $(".messages").append("<div class='typing-indicator-container'><div class='typing-indicator'><span></span><span></span><span></span></div></div>");
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            scrollDiv = $(".messages");
+            scrollDiv.animate({scrollTop: scrollDiv.prop("scrollHeight")}, 1000);
+        }
+
+        function removeTypingIndicator() {
+            $("div").remove(".typing-indicator-container");
+        }
+
+    </script>
+
+</body>
+</html>
