@@ -1,4 +1,5 @@
 .idea/
 *.iml
+cov-int
 src/main/webapp/WEB-INF/classes/assistant.properties
 target/

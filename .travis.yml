@@ -18,5 +18,5 @@ addons:
       name: "hvidberrrg/the-soon-to-be-famous-kyubot"
       description: "The soon to be famous KyuBOT"
     build_command_prepend: "mvn clean"
-    build_command: "mvn -DskipTests=true compile"
+    build_command: "mvn -DskipTests=true verify"
     branch_pattern: coverity_scan
