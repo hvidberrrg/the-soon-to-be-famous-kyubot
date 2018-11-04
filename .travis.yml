@@ -2,3 +2,21 @@ language: java
 
 jdk:
   - oraclejdk8
+
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "RdVey4rOgCPnEOs2FKG0azQjzzWUfNtEwMmeJBZtH4WjwVQ5o49RtN2/frKZ/iG4yPldpHK1RGrZJGbDm0DExbng6mMLgXOaTMEA89SqAYv+zI6acRQtzgkymiNoVa8yF4Rpp/NTBKHly6dzdwNxAu5gBFr8Wdy64YhOkBDU++3zkf1/z789sqn1CjI9HCJE3XvkCccxJ6mulxYCwFQBluUQvjSdAgNa/r+jR1L6vItQlysstcdfZ+sNbl1gqNw34LWPbsPSSRCjq7lArlv41Jrj5sDxI6mECP+mzJh+nlp+mZQh1iKbDWTaF4GPwBXtDl90hmLpSrAGi0OxhqY9hsAQNz1hurbNBKbolZvrZwXiv2EfySZ06xLkJqI/y1KFD9pfysWiZojIRQyPXVREQtqsMA7Ira/WS8lLIdFubUf+Odku0cI5N0xtI4q2mwu4CrakL218eenaBoljEzJdNpl2T/oqaX8uiDisT94iE5xGrPEZsG3k4j4SiNePHzT1pmThzquIohdWdqIyJLvYb+BJtx/hTcDLjf5YbgoP1ILUHGLvkmc5Qwy+V7mfL1Ook7l2ND/dfc86tPR40FO+Z5ElNtBm+0e5onzNwFNOZRc2ZaeFiaVFwQYL3vsIQiLYgc1DCljbcdcSd1V/L4XRCH5itIm75b9fjZK0TfQv9nU="
+
+before_install:
+  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: "hvidberrrg/the-soon-to-be-famous-kyubot"
+      description: "The soon to be famous KyuBOT"
+    build_command_prepend: "mvn clean"
+    build_command: "mvn -DskipTests=true compile"
+    branch_pattern: coverity_scan
