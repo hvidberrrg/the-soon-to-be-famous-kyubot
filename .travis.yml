@@ -15,9 +15,10 @@ before_install:
 addons:
   coverity_scan:
     project:
-      name: "hvidberrrg/the-soon-to-be-famous-kyubot"
-      description: "The soon to be famous KyuBOT (build submitted via Travis CI)"
+      name: hvidberrrg/the-soon-to-be-famous-kyubot
+      version: 1.0
+      description: The soon to be famous KyuBOT (build submitted via Travis CI)
     notification_email: hvidberrrg@users.noreply.github.com
-    build_command_prepend: "mvn clean"
-    build_command: "mvn -DskipTests=true verify"
+    build_command_prepend: mvn clean
+    build_command: mvn -DskipTests=true verify
     branch_pattern: coverity_scan
