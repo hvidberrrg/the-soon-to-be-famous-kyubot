@@ -22,3 +22,11 @@ addons:
     build_command_prepend: mvn clean
     build_command: mvn -DskipTests=true verify
     branch_pattern: coverity_scan
+
+script:
+  - if [ "${COVERITY_SCAN_BRANCH}" == 1 ]; then
+      echo "Skipping module tests on Coverity branch/job";
+    else
+      echo "Running script stage";
+      travis_retry mvn clean verify;
+    fi
