@@ -7,9 +7,9 @@ import java.util.Base64;
 import java.util.Properties;
 
 final class ClientConfig {
-    static String CREDENTIALS;
-    static String URL;
-    static String TERMINATE_ON_ACTION;
+    static final String CREDENTIALS;
+    static final String URL;
+    static final String TERMINATE_ON_ACTION;
 
     static {
         Properties assistantProps = PropertiesUtil.getProperties("assistant.properties");
@@ -22,6 +22,7 @@ final class ClientConfig {
         URL = apiUrl + "/" + workspaceId + "/" + endpoint + "?version=" + versionDate;
         String credentials = username + ":" + password;
         CREDENTIALS = Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
+        TERMINATE_ON_ACTION = "TODO"; // TODO
     }
 
     private ClientConfig() {}
