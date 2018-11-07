@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class GcsUtil {
     private static final int BUFFER_SIZE = 2 * 1024 * 1024;
-    private static final String bucket = "the-soon-to-be-famous-kyubot.appspot.com";
+    private static final String BUCKET = "the-soon-to-be-famous-kyubot.appspot.com";
 
     // Backoff parameters: do 10 retries within 15 seconds
     private static final GcsService gcsService = GcsServiceFactory.createGcsService(
@@ -26,7 +26,7 @@ public class GcsUtil {
 
     public static void saveContent(InputStream content, String filename) throws IOException {
         GcsFileOptions instance = GcsFileOptions.getDefaultInstance();
-        GcsFilename gcsFilename = new GcsFilename(bucket, filename);
+        GcsFilename gcsFilename = new GcsFilename(BUCKET, filename);
         GcsOutputChannel outputChannel = gcsService.createOrReplace(gcsFilename, instance);
         copy(content, Channels.newOutputStream(outputChannel));
     }
@@ -39,7 +39,7 @@ public class GcsUtil {
     }
 
     public static InputStream readContent(String filename) throws IOException {
-        GcsFilename gcsFilename = new GcsFilename(bucket, filename);
+        GcsFilename gcsFilename = new GcsFilename(BUCKET, filename);
         GcsInputChannel readChannel = gcsService.openPrefetchingReadChannel(gcsFilename, 0, BUFFER_SIZE);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         copy(Channels.newInputStream(readChannel), out);
