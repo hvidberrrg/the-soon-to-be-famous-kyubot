@@ -6,7 +6,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-public class TestUtil {
+public final class TestUtil {
 
     public String getFileContents(String filePath) throws IOException {
         URL url = this.getClass().getResource(filePath);
