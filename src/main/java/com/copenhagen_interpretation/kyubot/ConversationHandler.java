@@ -13,7 +13,6 @@ public class ConversationHandler extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         WatsonMessage message = WatsonMapper.requestToMessage(request);
-        String test = message.toJSON();
 
         String reply = WatsonAssistant.converse(message);
 

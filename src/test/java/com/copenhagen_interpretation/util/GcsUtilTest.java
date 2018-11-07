@@ -22,7 +22,7 @@ public class GcsUtilTest {
     );
 
     private static final String FILENAME = "testFilename";
-    private static final String FILECONTENTS = "Test";
+    private static final String CONTENT = "Test";
 
     @Before
     public void setup() {
@@ -36,12 +36,12 @@ public class GcsUtilTest {
 
     @Test(expected = Test.None.class /* no exception expected */)
     public void testSaveContent() throws IOException {
-        GcsUtil.saveContent(new ByteArrayInputStream(FILECONTENTS.getBytes(StandardCharsets.UTF_8)), FILENAME);
+        GcsUtil.saveContent(new ByteArrayInputStream(CONTENT.getBytes(StandardCharsets.UTF_8)), FILENAME);
     }
 
     @Test
     public void testReadContentString() throws IOException {
-        GcsUtil.saveContent(new ByteArrayInputStream(FILECONTENTS.getBytes(StandardCharsets.UTF_8)), FILENAME);
-        assertEquals(FILECONTENTS, GcsUtil.readContentString(FILENAME));
+        GcsUtil.saveContent(new ByteArrayInputStream(CONTENT.getBytes(StandardCharsets.UTF_8)), FILENAME);
+        assertEquals(CONTENT, GcsUtil.readContentString(FILENAME));
     }
 }

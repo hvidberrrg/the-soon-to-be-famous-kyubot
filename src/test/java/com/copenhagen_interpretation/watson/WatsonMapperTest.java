@@ -12,6 +12,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(BlockJUnit4ClassRunner.class)
 public class WatsonMapperTest {
@@ -25,7 +26,7 @@ public class WatsonMapperTest {
         WatsonMessage message = WatsonMapper.requestToMessage(INPUT_TEXT, "");
 
         assertEquals(INPUT_TEXT, message.getInput().getText());
-        assertEquals(null, message.getContext());
+        assertNull(message.getContext());
     }
 
     @Test
@@ -33,7 +34,7 @@ public class WatsonMapperTest {
         WatsonMessage message = WatsonMapper.requestToMessage(INPUT_TEXT, null);
 
         assertEquals(INPUT_TEXT, message.getInput().getText());
-        assertEquals(null, message.getContext());
+        assertNull(message.getContext());
     }
 
     @Test
@@ -41,7 +42,7 @@ public class WatsonMapperTest {
         WatsonMessage message = WatsonMapper.requestToMessage(INPUT_TEXT, "invalidContext");
 
         assertEquals(INPUT_TEXT, message.getInput().getText());
-        assertEquals(null, message.getContext());
+        assertNull(message.getContext());
     }
 
     @Test
