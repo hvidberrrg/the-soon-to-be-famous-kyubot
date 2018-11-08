@@ -24,9 +24,7 @@ addons:
     branch_pattern: coverity_scan
   sonarcloud:
       organization: "hvidberrrg-github"
-      token:
-        # encrypted value of token
-        secure: ZBbQ+AR0iJpfeufHtdJ1ffme6HXKPcqRE7RTQEw5mthC/LpgXdgaXvdKFqghEQJ9ymzHa9/xBzVP3K+lyQ2LsJV5C9w4fnHuW7GPBdmA5MdO68H7gDUfYIPqoFYCmaq1x4WgKja47i/cCQa+DlD9xeDzrrLX3tsDBZ1npwR2BPf17Nky819Oq41HJz5+tSdPlH4z6pVuSQdYYEv3jncCNq/U7dcKeXR35PnYEFWfEzOJ9ujfC3GhYCZt6dosyshJjGnT26nYqONaTFKYFQEHhZ5QnWV1L6yIY9sKS9f3z1CjOEDOe8I5V/wBVcBr7y2DxUApLZ0plkI+aIdDTMl6h3RxgczWk8acAqoOapmm8ywdG45siLHP4SVVYowrFQp1tUcLzh9W0dRaoi5Vc+Bd0kgwsIoR1suM9iC6Vc1idpgTr7SuS3m6Iy6CuwAHvthGzvtfeBcQplH1qqKgl+L/bq6Es/I+vg68H+l7wOToE6I6LrIxyBHXRrmgQlCKfuDo21gILm2kJSkwF11yaPp/AnFQ9eeAgaXSiZR6jQTCm3t0YD/LN22T9/FO0Fdy+SKUD9rDSKX/58alCwOg9zFpwcwnmeFC1ybJM1usxO6k63fN/IpRaBG1U1bFmBTn3T3TtdALL9u4deCNrstqccOmfeiynK4yaapeHXSpdPjjHJ4=
+      token: ${SONAR_TOKEN}
 
 script:
   - if [ "${COVERITY_SCAN_BRANCH}" == 1 ]; then
