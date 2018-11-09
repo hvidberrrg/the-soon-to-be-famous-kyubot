@@ -32,5 +32,5 @@ script:
     else
       echo "Running script stage";
       travis_retry mvn clean verify;
-      mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.login=${SONAR_TOKEN};
+      mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=hvidberrrg_the-soon-to-be-famous-kyubot -Dsonar.organization=hvidberrrg-github -Dsonar.login=${SONAR_TOKEN};
     fi
