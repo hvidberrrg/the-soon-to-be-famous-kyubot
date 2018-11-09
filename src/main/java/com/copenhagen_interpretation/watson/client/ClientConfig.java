@@ -22,7 +22,7 @@ final class ClientConfig {
         URL = apiUrl + "/" + workspaceId + "/" + endpoint + "?version=" + versionDate;
         String credentials = username + ":" + password;
         CREDENTIALS = Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
-        TERMINATE_ON_ACTION = "TODO"; // TODO
+        TERMINATE_ON_ACTION = "end_conversation"; // TODO
     }
 
     private ClientConfig() {}
