@@ -113,6 +113,20 @@ div.conversation {
     }
 }
 
+/* Use a lighter shade og grey for the placeholder text */
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #A0A0A0;
+    opacity: 1; /* Firefox */
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #A0A0A0;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #A0A0A0;
+}
+
 form.chat {
     margin: 0;
     cursor: default;
@@ -276,20 +290,6 @@ form.chat input[type='submit'] {
     form.chat input[type='submit'] {
         width: 20%;
     }
-}
-
-/* Use a lighter shade og grey for the placeholder text */
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #A0A0A0;
-    opacity: 1; /* Firefox */
-}
-
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: #A0A0A0;
-}
-
-::-ms-input-placeholder { /* Microsoft Edge */
-    color: #A0A0A0;
 }
 
 
