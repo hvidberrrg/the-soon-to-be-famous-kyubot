@@ -20,6 +20,8 @@ public class GcsUtil {
                                                             .build());
 
 
+    private GcsUtil() {}
+
     public static void saveContent(String content, String filename) throws IOException {
         saveContent(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)), filename);
     }

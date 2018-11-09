@@ -24,6 +24,8 @@ public class WatsonMapper {
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+    private WatsonMapper() {}
+
     public static WatsonMessage requestToMessage(HttpServletRequest request) throws UnsupportedEncodingException {
         String input = request.getParameter("input");
         if (input != null) {

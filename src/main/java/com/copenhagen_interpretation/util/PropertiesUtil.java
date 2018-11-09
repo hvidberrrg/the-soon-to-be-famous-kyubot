@@ -9,6 +9,8 @@ import java.util.Properties;
 public class PropertiesUtil {
     private static final Logger LOGGER = Logger.getLogger(PropertiesUtil.class);
 
+    private PropertiesUtil() {}
+
     public static Properties getProperties(String propertyFile) {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         Properties properties = new Properties();

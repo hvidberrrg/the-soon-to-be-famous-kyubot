@@ -7,6 +7,8 @@ import java.io.IOException;
 
 public class WatsonAssistant {
 
+    private WatsonAssistant() {}
+
     public static String converse(WatsonMessage message) throws IOException {
          return SimpleHttpClient.doPost(message.toJSON());
     }

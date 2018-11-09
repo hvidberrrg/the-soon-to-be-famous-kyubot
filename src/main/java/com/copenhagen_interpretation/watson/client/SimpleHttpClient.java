@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 public class SimpleHttpClient {
 
+    private SimpleHttpClient() {}
+
     public static String doPost(String payload) throws IOException {
         HttpURLConnection connection = prepareConnection();
         sendData(connection, payload);
