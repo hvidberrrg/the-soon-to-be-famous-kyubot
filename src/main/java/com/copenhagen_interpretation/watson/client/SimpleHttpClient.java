@@ -33,14 +33,6 @@ public class SimpleHttpClient {
             writer.flush();
         }
     }
-    /*
-    private static void sendData(HttpURLConnection connection, String payload) throws IOException {
-        try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
-            outputStream.write(payload.getBytes(StandardCharsets.UTF_8));
-            outputStream.flush();
-        }
-    }
-     */
 
     private static String receiveResponse(HttpURLConnection connection) throws IOException {
         String response;
@@ -52,17 +44,4 @@ public class SimpleHttpClient {
         return response;
     }
 
-    /*
-    private static String receiveResponse(HttpURLConnection connection) throws IOException {
-        String response;
-        try (ByteArrayInputStream in = (ByteArrayInputStream) connection.getContent()) {
-            int n = in.available();
-            byte[] bytes = new byte[n];
-            in.read(bytes, 0, n);
-            response = new String(bytes, StandardCharsets.UTF_8);
-        }
-
-        return response;
-    }
-     */
 }
