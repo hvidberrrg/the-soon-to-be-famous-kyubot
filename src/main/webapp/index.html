@@ -24,7 +24,7 @@
     <div class="conversation">
         <form class="chat" action="/conversation" method="post" id="kyubotQuery">
             <div class="messages">&nbsp;</div>
-            <input type="text" id="inputText" name="input" placeholder="Type your message here...">
+            <input type="text" id="inputText" name="input" placeholder="Enter your message here...">
             <input type="hidden" id="watson_context" name="context" value="">
             <input type="submit" value="Send">
         </form>
@@ -49,21 +49,25 @@
             var formData = form.serialize();
 
             // Add the user's message to the conversation
-            addMessage("user", $("#inputText").val());
-            // Clear input
-            $('#inputText').val([]);
-            // Indicate that the KyuBOT is preparing a reply
-            addTypingIndicator();
+            var inputText = $("#inputText");
+            var message = inputText.val();
+            if (message && (message = $.trim(message))) {
+                addMessage("user", message);
+                // Clear input
+                inputText.val([]);
+                // Indicate that the KyuBOT is preparing a reply
+                addTypingIndicator();
 
-            // Get the KyuBOT's reply and update the conversation
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: formData,
-                success: function (data) {
-                    updateConversation(data);
-                }
-            });
+                // Get the KyuBOT's reply and update the conversation
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: formData,
+                    success: function (data) {
+                        updateConversation(data);
+                    }
+                });
+            }
             e.preventDefault(); // avoid to execute the actual submit of the form.
         });
 
@@ -87,7 +91,7 @@
         }
 
         function scrollToBottom() {
-            scrollDiv = $(".messages");
+            var scrollDiv = $(".messages");
             scrollDiv.animate({scrollTop: scrollDiv.prop("scrollHeight")}, 1000);
         }
 
