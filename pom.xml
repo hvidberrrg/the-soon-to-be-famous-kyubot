@@ -140,6 +140,9 @@
             <testResource>
                 <directory>${project.basedir}/src/test/webapp/WEB-INF/classes</directory>
             </testResource>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+            </testResource>
         </testResources>
 
     </build>
