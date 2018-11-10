@@ -20,9 +20,9 @@ public class ClientConfigTest {
 
         String url = KyubotTestProps.APIURL + "/" + KyubotTestProps.WORKSPACEID + "/" + KyubotTestProps.ENDPOINT + "?version=" + KyubotTestProps.VERSIONDATE;
 
-        assertEquals(ClientConfig.CREDENTIALS, credentials);
-        assertEquals(ClientConfig.URL, url);
-        assertEquals(ClientConfig.TERMINATE_ON_ACTION, KyubotTestProps.TERMINATEONACTION);
+        assertEquals(credentials, ClientConfig.CREDENTIALS); //NOSONAR
+        assertEquals(url, ClientConfig.URL ); //NOSONAR
+        assertEquals(KyubotTestProps.TERMINATEONACTION, ClientConfig.TERMINATE_ON_ACTION); //NOSONAR
     }
 
 }
