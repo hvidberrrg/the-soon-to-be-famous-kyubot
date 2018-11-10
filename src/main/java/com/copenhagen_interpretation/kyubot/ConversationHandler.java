@@ -25,7 +25,7 @@ public class ConversationHandler extends HttpServlet {
         if (message == null) {
             error = "{\"error\": \"Could not map request.\"}";
         } else {
-            reply = converseWithWatson(message);
+            reply = WatsonAssistant.converse(message);
             if (reply == null) {
                 error = "{\"error\": \"Could not contact Watson.\"}";
             }
@@ -53,12 +53,4 @@ public class ConversationHandler extends HttpServlet {
         }
     }
 
-    private String converseWithWatson(WatsonMessage message) {
-        try {
-            return WatsonAssistant.converse(message);
-        } catch (IOException e) {
-            LOGGER.severe("Could not converse with Watson. The exception is: " + e);
-            return null;
-        }
-    }
 }
