@@ -3,7 +3,6 @@ package com.copenhagen_interpretation.kyubot;
 import com.copenhagen_interpretation.watson.WatsonAssistant;
 import com.copenhagen_interpretation.watson.WatsonMapper;
 import com.copenhagen_interpretation.watson.model.WatsonMessage;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,23 +17,23 @@ public class ConversationHandler extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        JSONObject error = null;
+        String error = null;
         String reply = null;
 
         response.setContentType("application/json; charset=utf-8");
         WatsonMessage message = getMessageFromRequest(request);
         if (message == null) {
-            error = new JSONObject().put("error", "Could not map request.");
+            error = "{\"error\": \"Could not map request.\"}";
         } else {
             reply = converseWithWatson(message);
             if (reply == null) {
-                error = new JSONObject().put("error", "Could not contact Watson.");
+                error = "{\"error\": \"Could not contact Watson.\"}";
             }
         }
 
         if (error != null) {
-            reply = error.toString();
             response.setStatus(HttpURLConnection.HTTP_UNAVAILABLE);
+            reply = error;
         }
 
         try {
