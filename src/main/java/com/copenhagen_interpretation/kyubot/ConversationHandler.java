@@ -3,6 +3,7 @@ package com.copenhagen_interpretation.kyubot;
 import com.copenhagen_interpretation.watson.WatsonAssistant;
 import com.copenhagen_interpretation.watson.WatsonMapper;
 import com.copenhagen_interpretation.watson.model.WatsonMessage;
+import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +14,14 @@ import java.net.HttpURLConnection;
 import java.util.logging.Logger;
 
 public class ConversationHandler extends HttpServlet {
-    private static final Logger LOGGER = Logger.getLogger(ConversationHandler.class.getName());
+    @Inject
+    private Logger logger;
+
+    @Inject
+    private WatsonAssistant watsonAssistant;
+
+    @Inject
+    private WatsonMapper watsonMapper;
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
@@ -25,7 +33,7 @@ public class ConversationHandler extends HttpServlet {
         if (message == null) {
             error = "{\"error\": \"Could not map request.\"}";
         } else {
-            reply = WatsonAssistant.converse(message);
+            reply = watsonAssistant.converse(message);
             if (reply == null) {
                 error = "{\"error\": \"Could not contact Watson.\"}";
             }
@@ -40,15 +48,15 @@ public class ConversationHandler extends HttpServlet {
             response.getWriter().println(reply);
         } catch (IOException e) {
             response.setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR);
-            LOGGER.severe("Couldn't write response. The exception is: " + e);
+            logger.severe("Couldn't write response. The exception is: " + e);
         }
     }
 
     private WatsonMessage getMessageFromRequest(HttpServletRequest request) {
         try {
-            return WatsonMapper.requestToMessage(request);
+            return watsonMapper.requestToMessage(request);
         } catch (UnsupportedEncodingException e) {
-            LOGGER.severe("Couldn't map request to Watson message. The exception is: " + e);
+            logger.severe("Couldn't map request to Watson message. The exception is: " + e);
             return null;
         }
     }

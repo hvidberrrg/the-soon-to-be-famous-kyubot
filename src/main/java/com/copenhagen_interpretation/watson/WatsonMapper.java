@@ -7,26 +7,28 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.log4j.Logger;
+import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Logger;
 
 public class WatsonMapper {
-    private static final Logger LOGGER = Logger.getLogger(WatsonMapper.class);
     private static final ObjectMapper MAPPER;
+
+    @Inject
+    Logger logger;
+
     static {
         MAPPER = new ObjectMapper();
         MAPPER.setSerializationInclusion(Include.NON_NULL);
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    private WatsonMapper() {}
-
-    public static WatsonMessage requestToMessage(HttpServletRequest request) throws UnsupportedEncodingException {
+    public WatsonMessage requestToMessage(HttpServletRequest request) throws UnsupportedEncodingException {
         String input = request.getParameter("input");
         if (input != null) {
             input = URLDecoder.decode(input, StandardCharsets.UTF_8.name());
@@ -39,25 +41,25 @@ public class WatsonMapper {
         return requestToMessage(input, context);
     }
 
-    public static WatsonMessage requestToMessage(String inputString, String contextString) {
+    public WatsonMessage requestToMessage(String inputString, String contextString) {
         Input input = new Input(inputString);
         WatsonMessage message = new WatsonMessage(input);
         if (contextString != null && !contextString.isEmpty()) {
             try {
                 message.setContext(MAPPER.readTree(contextString));
             } catch (IOException e) {
-                LOGGER.error("Couldn't deserialize context: " + contextString + " - " + e);
+                logger.severe("Couldn't deserialize context: " + contextString + " - " + e);
             }
         }
 
         return message;
     }
 
-    public static WatsonReply jsonToReply(String json) throws IOException {
+    public WatsonReply jsonToReply(String json) throws IOException {
         return MAPPER.readValue(json, WatsonReply.class);
     }
 
-    public static String toJSON(Object obj) throws JsonProcessingException {
+    public String toJSON(Object obj) throws JsonProcessingException {
         return MAPPER.writeValueAsString(obj);
     }
 

@@ -4,25 +4,21 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
-    <servlet>
-        <servlet-name>Keep Watson Assistant Alive</servlet-name>
-        <servlet-class>com.copenhagen_interpretation.kyubot.cron.KeepAlive</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>Talk with the KyuBOT</servlet-name>
-        <servlet-class>com.copenhagen_interpretation.kyubot.ConversationHandler</servlet-class>
-    </servlet>
+    <filter>
+        <filter-name>guiceFilter</filter-name>
+        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+    </filter>
 
-    <servlet-mapping>
-        <servlet-name>Keep Watson Assistant Alive</servlet-name>
-        <url-pattern>/cron/keepAlive</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Talk with the KyuBOT</servlet-name>
-        <url-pattern>/conversation</url-pattern>
-    </servlet-mapping>
+    <filter-mapping>
+        <filter-name>guiceFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+
+    <listener>
+        <listener-class>com.copenhagen_interpretation.guice.ServletContextListener</listener-class>
+    </listener>
 </web-app>

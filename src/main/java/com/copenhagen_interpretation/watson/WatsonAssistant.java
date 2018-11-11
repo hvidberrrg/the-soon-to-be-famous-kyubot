@@ -2,20 +2,26 @@ package com.copenhagen_interpretation.watson;
 
 import com.copenhagen_interpretation.watson.client.SimpleHttpClient;
 import com.copenhagen_interpretation.watson.model.WatsonMessage;
+import com.google.inject.Inject;
 
 import java.io.IOException;
 import java.util.logging.Logger;
 
 public class WatsonAssistant {
-    private static final Logger LOGGER = Logger.getLogger(WatsonAssistant.class.getName());
+    @Inject
+    private Logger logger;
 
-    private WatsonAssistant() {}
+    @Inject
+    private SimpleHttpClient simpleHttpClient;
 
-    public static String converse(WatsonMessage message) {
+    @Inject
+    private WatsonMapper watsonMapper;
+
+    public String converse(WatsonMessage message) {
         try {
-            return SimpleHttpClient.doPost(message.toJSON());
+            return simpleHttpClient.doPost(watsonMapper.toJSON(message));
         } catch (IOException e) {
-            LOGGER.severe("Could not converse with Watson. The exception is: " + e);
+            logger.severe("Could not converse with Watson. The exception is: " + e);
             return null;
         }
     }

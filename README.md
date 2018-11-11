@@ -1,4 +1,6 @@
-# The soon to be famous KyuBOT
+The soon to be famous KyuBOT
+====
+**Continuous Integration:** [![Build Status](https://api.travis-ci.org/hvidberrrg/the-soon-to-be-famous-kyubot.png?branch=master)](https://travis-ci.org/hvidberrrg/the-soon-to-be-famous-kyubot) <br/>
 
 ## License notice
 This file is part of The soon to be famous KyuBOT.

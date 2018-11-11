@@ -1,9 +1,11 @@
 package com.copenhagen_interpretation.watson;
 
+import com.copenhagen_interpretation.guice.GuiceTest;
 import com.copenhagen_interpretation.util.TestUtil;
 import com.copenhagen_interpretation.watson.model.WatsonMessage;
 import com.copenhagen_interpretation.watson.model.WatsonReply;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.inject.Inject;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,15 +17,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 @RunWith(BlockJUnit4ClassRunner.class)
-public class WatsonMapperTest {
+public class WatsonMapperTest extends GuiceTest {
     private static String CONTEXT_FILE = "/com/copenhagen_interpretation/watson/watsonMapperTest/context.json";
     private static String REPLY_FILE = "/com/copenhagen_interpretation/watson/watsonMapperTest/watsonReply.json";
     private static String INPUT_TEXT = "Input text";
     private static TestUtil UTIL = new TestUtil();
 
+    @Inject
+    private WatsonMapper watsonMapper;
+
     @Test
     public void testRequestToQuery_EmptyContext() {
-        WatsonMessage message = WatsonMapper.requestToMessage(INPUT_TEXT, "");
+        WatsonMessage message = watsonMapper.requestToMessage(INPUT_TEXT, "");
 
         assertEquals(INPUT_TEXT, message.getInput().getText());
         assertNull(message.getContext());
@@ -31,7 +36,7 @@ public class WatsonMapperTest {
 
     @Test
     public void testRequestToQuery_NullContext() {
-        WatsonMessage message = WatsonMapper.requestToMessage(INPUT_TEXT, null);
+        WatsonMessage message = watsonMapper.requestToMessage(INPUT_TEXT, null);
 
         assertEquals(INPUT_TEXT, message.getInput().getText());
         assertNull(message.getContext());
@@ -39,7 +44,7 @@ public class WatsonMapperTest {
 
     @Test
     public void testRequestToQuery_WithInvalidContext() {
-        WatsonMessage message = WatsonMapper.requestToMessage(INPUT_TEXT, "invalidContext");
+        WatsonMessage message = watsonMapper.requestToMessage(INPUT_TEXT, "invalidContext");
 
         assertEquals(INPUT_TEXT, message.getInput().getText());
         assertNull(message.getContext());
@@ -48,7 +53,7 @@ public class WatsonMapperTest {
     @Test
     public void testRequestToQuery_WithContext() throws IOException {
         String context = UTIL.getFileContents(CONTEXT_FILE);
-        WatsonMessage message = WatsonMapper.requestToMessage(INPUT_TEXT, context);
+        WatsonMessage message = watsonMapper.requestToMessage(INPUT_TEXT, context);
 
         assertEquals(INPUT_TEXT, message.getInput().getText());
         assertEquals("a96ec62f-773c-4e84-8be9-f9dbca9f83d0", message.getContext().get("conversation_id").asText());
@@ -57,8 +62,8 @@ public class WatsonMapperTest {
 
     @Test
     public void testMessageToJSON_WithoutContext() throws JsonProcessingException {
-        WatsonMessage message = WatsonMapper.requestToMessage(INPUT_TEXT, null);
-        String json = WatsonMapper.toJSON(message);
+        WatsonMessage message = watsonMapper.requestToMessage(INPUT_TEXT, null);
+        String json = watsonMapper.toJSON(message);
 
         JSONObject input = new JSONObject().put("text", INPUT_TEXT);
         JSONObject expectedJSON = new JSONObject().put("input", input);
@@ -69,8 +74,8 @@ public class WatsonMapperTest {
     @Test
     public void testMessageToJSON() throws IOException {
         String context = UTIL.getFileContents(CONTEXT_FILE);
-        WatsonMessage message = WatsonMapper.requestToMessage(INPUT_TEXT, context);
-        String jsonString = WatsonMapper.toJSON(message);
+        WatsonMessage message = watsonMapper.requestToMessage(INPUT_TEXT, context);
+        String jsonString = watsonMapper.toJSON(message);
 
         JSONObject json = new JSONObject(jsonString);
 
@@ -82,7 +87,7 @@ public class WatsonMapperTest {
     @Test
     public void testJsonToReply() throws IOException {
         String jsonString = UTIL.getFileContents(REPLY_FILE);
-        WatsonReply reply = WatsonMapper.jsonToReply(jsonString);
+        WatsonReply reply = watsonMapper.jsonToReply(jsonString);
 
         assertEquals("Hi there...", reply.getOutput().getText().get(0));
         assertEquals("3ca96aec-d369-4779-959c-697f333be670", reply.getContext().get("conversation_id").asText());
