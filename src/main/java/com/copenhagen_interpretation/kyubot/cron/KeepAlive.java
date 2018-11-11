@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -27,13 +28,34 @@ public class KeepAlive extends HttpServlet {
     private static WatsonMapper watsonMapper;
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        WatsonMessage message = newRandomMessage();
-        String reply = watsonAssistant.converse(message);
-        storeContext(reply);
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+        String error = null;
 
         response.setContentType("application/json; charset=utf-8");
-        response.getWriter().println(reply);
+        WatsonMessage message = newRandomMessage();
+        String reply = watsonAssistant.converse(message);
+        if (reply == null) {
+            error = "{\"error\": \"Could not contact Watson.\"}";
+        } else {
+            try {
+                storeContext(reply);
+            } catch (IOException e) {
+                error = "{\"error\": \"Could not store Watson context.\"}";
+                logger.severe("Could not store Watson context. The exception is: " + e);
+            }
+        }
+
+        if (error != null) {
+            response.setStatus(HttpURLConnection.HTTP_UNAVAILABLE);
+            reply = error;
+        }
+
+        try {
+            response.getWriter().println(reply);
+        } catch (IOException e) {
+            response.setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR);
+            logger.severe("Couldn't write response. The exception is: " + e);
+        }
     }
 
     private WatsonMessage newRandomMessage() {
