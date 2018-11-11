@@ -6,7 +6,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.Before;
 
-public class GuiceTest {
+public class GuiceTest { //NOSONAR
     protected Injector injector = Guice.createInjector(new AbstractModule() {
         @Override
         protected void configure() {

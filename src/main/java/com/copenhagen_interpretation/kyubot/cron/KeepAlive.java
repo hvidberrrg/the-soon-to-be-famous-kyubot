@@ -18,13 +18,13 @@ public class KeepAlive extends HttpServlet {
     private static final String CONTEXT_FILE = "keepAlive/context.json";
 
     @Inject
-    private Logger logger;
+    private static Logger logger;
 
     @Inject
-    private WatsonAssistant watsonAssistant;
+    private static WatsonAssistant watsonAssistant;
 
     @Inject
-    private WatsonMapper watsonMapper;
+    private static WatsonMapper watsonMapper;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

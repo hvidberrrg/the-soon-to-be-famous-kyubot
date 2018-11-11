@@ -15,13 +15,13 @@ import java.util.logging.Logger;
 
 public class ConversationHandler extends HttpServlet {
     @Inject
-    private Logger logger;
+    private static Logger logger;
 
     @Inject
-    private WatsonAssistant watsonAssistant;
+    private static WatsonAssistant watsonAssistant;
 
     @Inject
-    private WatsonMapper watsonMapper;
+    private static WatsonMapper watsonMapper;
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
