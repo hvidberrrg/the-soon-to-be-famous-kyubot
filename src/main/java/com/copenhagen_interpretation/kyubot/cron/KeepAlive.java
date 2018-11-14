@@ -6,6 +6,7 @@ import com.copenhagen_interpretation.watson.WatsonMapper;
 import com.copenhagen_interpretation.watson.model.WatsonMessage;
 import com.copenhagen_interpretation.watson.model.WatsonReply;
 import com.google.inject.Inject;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServlet;
@@ -20,7 +21,7 @@ public class KeepAlive extends HttpServlet {
     private static final String CONTEXT_FILE = "keepAlive/context.json";
 
     @Inject
-    private GcsUtil gcsUtil;
+    private static GcsUtil gcsUtil;
 
     @Inject
     private static Logger logger;
@@ -56,7 +57,7 @@ public class KeepAlive extends HttpServlet {
                 reply = new JSONObject().put("error", error).toString();
             }
             response.getWriter().println(reply);
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             response.setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR);
             logger.severe("Couldn't write response. The exception is: " + e);
         }
@@ -81,8 +82,8 @@ public class KeepAlive extends HttpServlet {
     }
 
     // Setters are only used by unit tests - dependencies are otherwise injected by Guice
-    public void setGcsUtil(GcsUtil gcsUtil) {
-        this.gcsUtil = gcsUtil;
+    public static void setGcsUtil(GcsUtil gcsUtil) {
+        KeepAlive.gcsUtil = gcsUtil;
     }
 
     public static void setWatsonAssistant(WatsonAssistant watsonAssistant) {

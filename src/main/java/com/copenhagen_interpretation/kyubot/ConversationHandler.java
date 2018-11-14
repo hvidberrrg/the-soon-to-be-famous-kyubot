@@ -4,6 +4,7 @@ import com.copenhagen_interpretation.watson.WatsonAssistant;
 import com.copenhagen_interpretation.watson.WatsonMapper;
 import com.copenhagen_interpretation.watson.model.WatsonMessage;
 import com.google.inject.Inject;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServlet;
@@ -47,7 +48,7 @@ public class ConversationHandler extends HttpServlet {
                 reply = new JSONObject().put("error", error).toString();
             }
             response.getWriter().println(reply);
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             response.setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR);
             logger.severe("Couldn't write response. The exception is: " + e);
         }
@@ -63,11 +64,11 @@ public class ConversationHandler extends HttpServlet {
     }
 
     // Setters are only used by unit tests - dependencies are otherwise injected by Guice
-    public void setWatsonAssistant(WatsonAssistant watsonAssistant) {
-        this.watsonAssistant = watsonAssistant;
+    public static void setWatsonAssistant(WatsonAssistant watsonAssistant) {
+        ConversationHandler.watsonAssistant = watsonAssistant;
     }
 
-    public void setWatsonMapper(WatsonMapper watsonMapper) {
-        this.watsonMapper = watsonMapper;
+    public static void setWatsonMapper(WatsonMapper watsonMapper) {
+        ConversationHandler.watsonMapper = watsonMapper;
     }
 }

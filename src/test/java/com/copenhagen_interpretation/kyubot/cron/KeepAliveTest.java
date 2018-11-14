@@ -52,9 +52,9 @@ public class KeepAliveTest extends AbstractGuiceInjector {
     public void setup() throws Exception {
         super.setup();
         MockitoAnnotations.initMocks(this);
-        // Add mocks to the keepAlive servlet
-        keepAlive.setGcsUtil(mockGcsUtil);
-        keepAlive.setWatsonAssistant(mockWatsonAssistant);
+        // Add mocks to KeepAlive
+        KeepAlive.setGcsUtil(mockGcsUtil);
+        KeepAlive.setWatsonAssistant(mockWatsonAssistant);
         // Return repsonse contents as the 'reply' StringWriter
         when(mockHttpServletResponse.getWriter()).thenReturn(replyPrintWriter);
 

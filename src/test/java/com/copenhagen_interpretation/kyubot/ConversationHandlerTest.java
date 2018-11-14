@@ -46,9 +46,9 @@ public class ConversationHandlerTest extends AbstractGuiceInjector {
     public void setup() throws Exception {
         super.setup();
         MockitoAnnotations.initMocks(this);
-        // Add mocks to the conversationHandler
-        conversationHandler.setWatsonAssistant(mockWatsonAssistant);
-        conversationHandler.setWatsonMapper(mockWatsonMapper);
+        // Add mocks to ConversationHandler
+        ConversationHandler.setWatsonAssistant(mockWatsonAssistant);
+        ConversationHandler.setWatsonMapper(mockWatsonMapper);
         // Return repsonse contents as the 'reply' StringWriter
         when(mockHttpServletResponse.getWriter()).thenReturn(replyPrintWriter);
 
