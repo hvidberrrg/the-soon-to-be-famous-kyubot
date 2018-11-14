@@ -1,7 +1,9 @@
 package com.copenhagen_interpretation.util;
 
+import com.copenhagen_interpretation.guice.AbstractGuiceInjector;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(BlockJUnit4ClassRunner.class)
-public class GcsUtilTest {
+public class GcsUtilTest extends AbstractGuiceInjector {
 
     private final LocalServiceTestHelper testHelper = new LocalServiceTestHelper(
             new LocalDatastoreServiceTestConfig()
@@ -24,8 +26,11 @@ public class GcsUtilTest {
     private static final String FILENAME = "testFilename";
     private static final String CONTENT = "Test";
 
+    @Inject GcsUtil gcsUtil;
+
     @Before
-    public void setup() {
+    public void setup() throws Exception {
+        super.setup();
         testHelper.setUp();
     }
 
@@ -36,12 +41,12 @@ public class GcsUtilTest {
 
     @Test(expected = Test.None.class /* no exception expected */)
     public void testSaveContent() throws IOException {
-        GcsUtil.saveContent(new ByteArrayInputStream(CONTENT.getBytes(StandardCharsets.UTF_8)), FILENAME);
+        gcsUtil.saveContent(new ByteArrayInputStream(CONTENT.getBytes(StandardCharsets.UTF_8)), FILENAME);
     }
 
     @Test
     public void testReadContentString() throws IOException {
-        GcsUtil.saveContent(new ByteArrayInputStream(CONTENT.getBytes(StandardCharsets.UTF_8)), FILENAME);
-        assertEquals(CONTENT, GcsUtil.readContentString(FILENAME));
+        gcsUtil.saveContent(new ByteArrayInputStream(CONTENT.getBytes(StandardCharsets.UTF_8)), FILENAME);
+        assertEquals(CONTENT, gcsUtil.readContentString(FILENAME));
     }
 }

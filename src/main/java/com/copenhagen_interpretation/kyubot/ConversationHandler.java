@@ -4,6 +4,7 @@ import com.copenhagen_interpretation.watson.WatsonAssistant;
 import com.copenhagen_interpretation.watson.WatsonMapper;
 import com.copenhagen_interpretation.watson.model.WatsonMessage;
 import com.google.inject.Inject;
+import org.json.JSONObject;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,20 +32,20 @@ public class ConversationHandler extends HttpServlet {
         response.setContentType("application/json; charset=utf-8");
         WatsonMessage message = getMessageFromRequest(request);
         if (message == null) {
-            error = "{\"error\": \"Could not map request.\"}";
+            error = "Could not map request.";
+            response.setStatus(HttpURLConnection.HTTP_UNAVAILABLE);
         } else {
             reply = watsonAssistant.converse(message);
             if (reply == null) {
-                error = "{\"error\": \"Could not contact Watson.\"}";
+                error = "Could not contact Watson.";
+                response.setStatus(HttpURLConnection.HTTP_BAD_GATEWAY);
             }
         }
 
-        if (error != null) {
-            response.setStatus(HttpURLConnection.HTTP_UNAVAILABLE);
-            reply = error;
-        }
-
         try {
+            if (error != null) {
+                reply = new JSONObject().put("error", error).toString();
+            }
             response.getWriter().println(reply);
         } catch (IOException e) {
             response.setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR);
@@ -61,4 +62,12 @@ public class ConversationHandler extends HttpServlet {
         }
     }
 
+    // Setters are only used by unit tests - dependencies are otherwise injected by Guice
+    public void setWatsonAssistant(WatsonAssistant watsonAssistant) {
+        this.watsonAssistant = watsonAssistant;
+    }
+
+    public void setWatsonMapper(WatsonMapper watsonMapper) {
+        this.watsonMapper = watsonMapper;
+    }
 }

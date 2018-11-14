@@ -1,6 +1,6 @@
 package com.copenhagen_interpretation.watson;
 
-import com.copenhagen_interpretation.guice.GuiceTest;
+import com.copenhagen_interpretation.guice.AbstractGuiceInjector;
 import com.copenhagen_interpretation.util.TestUtil;
 import com.copenhagen_interpretation.watson.model.WatsonMessage;
 import com.copenhagen_interpretation.watson.model.WatsonReply;
@@ -17,12 +17,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 @RunWith(BlockJUnit4ClassRunner.class)
-public class WatsonMapperTest extends GuiceTest {
+public class WatsonMapperTest extends AbstractGuiceInjector {
     private static String CONTEXT_FILE = "/com/copenhagen_interpretation/watson/watsonMapperTest/context.json";
     private static String REPLY_FILE = "/com/copenhagen_interpretation/watson/watsonMapperTest/watsonReply.json";
     private static String INPUT_TEXT = "Input text";
-    private static TestUtil UTIL = new TestUtil();
 
+    @Inject
+    private TestUtil testUtil;
     @Inject
     private WatsonMapper watsonMapper;
 
@@ -52,7 +53,7 @@ public class WatsonMapperTest extends GuiceTest {
 
     @Test
     public void testRequestToQuery_WithContext() throws IOException {
-        String context = UTIL.getFileContents(CONTEXT_FILE);
+        String context = testUtil.getFileContents(CONTEXT_FILE);
         WatsonMessage message = watsonMapper.requestToMessage(INPUT_TEXT, context);
 
         assertEquals(INPUT_TEXT, message.getInput().getText());
@@ -73,7 +74,7 @@ public class WatsonMapperTest extends GuiceTest {
 
     @Test
     public void testMessageToJSON() throws IOException {
-        String context = UTIL.getFileContents(CONTEXT_FILE);
+        String context = testUtil.getFileContents(CONTEXT_FILE);
         WatsonMessage message = watsonMapper.requestToMessage(INPUT_TEXT, context);
         String jsonString = watsonMapper.toJSON(message);
 
@@ -86,7 +87,7 @@ public class WatsonMapperTest extends GuiceTest {
 
     @Test
     public void testJsonToReply() throws IOException {
-        String jsonString = UTIL.getFileContents(REPLY_FILE);
+        String jsonString = testUtil.getFileContents(REPLY_FILE);
         WatsonReply reply = watsonMapper.jsonToReply(jsonString);
 
         assertEquals("Hi there...", reply.getOutput().getText().get(0));

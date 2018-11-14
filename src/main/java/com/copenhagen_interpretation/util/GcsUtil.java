@@ -19,28 +19,25 @@ public class GcsUtil {
                                                             .totalRetryPeriodMillis(15000)
                                                             .build());
 
-
-    private GcsUtil() {}
-
-    public static void saveContent(String content, String filename) throws IOException {
+    public void saveContent(String content, String filename) throws IOException {
         saveContent(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)), filename);
     }
 
-    public static void saveContent(InputStream content, String filename) throws IOException {
+    public void saveContent(InputStream content, String filename) throws IOException {
         GcsFileOptions instance = GcsFileOptions.getDefaultInstance();
         GcsFilename gcsFilename = new GcsFilename(BUCKET, filename);
         GcsOutputChannel outputChannel = gcsService.createOrReplace(gcsFilename, instance);
         copy(content, Channels.newOutputStream(outputChannel));
     }
 
-    public static String readContentString(String filename) throws IOException {
+    public String readContentString(String filename) throws IOException {
         try (InputStream in = readContent(filename);
              BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
             return reader.lines().collect(Collectors.joining("\n"));
         }
     }
 
-    public static InputStream readContent(String filename) throws IOException {
+    public InputStream readContent(String filename) throws IOException {
         GcsFilename gcsFilename = new GcsFilename(BUCKET, filename);
         GcsInputChannel readChannel = gcsService.openPrefetchingReadChannel(gcsFilename, 0, BUFFER_SIZE);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -49,7 +46,7 @@ public class GcsUtil {
         return new ByteArrayInputStream(out.toByteArray());
     }
 
-    private static void copy(InputStream input, OutputStream output) throws IOException {
+    private void copy(InputStream input, OutputStream output) throws IOException {
         try {
             byte[] buffer = new byte[BUFFER_SIZE];
             int bytesRead = input.read(buffer);
