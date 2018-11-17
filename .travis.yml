@@ -19,6 +19,8 @@ script:
   - if [ "${TRAVIS_BRANCH}" == "coverity_scan" ]; then
       echo "Skipping module tests on Coverity branch/job";
       if [ -z "${COVERITY_SCAN_TOKEN}" ]; then
+        echo "Coverity scan is not run";
+      else
         export COVERITY_SCAN_PROJECT_NAME="hvidberrrg/the-soon-to-be-famous-kyubot";
         export COVERITY_SCAN_NOTIFICATION_EMAIL="hvidberrrg@users.noreply.github.com";
         export COVERITY_SCAN_BUILD_COMMAND="mvn install";
@@ -26,8 +28,6 @@ script:
         export COVERITY_SCAN_BRANCH_PATTERN="master";
         export COVERITY_SCAN_TOKEN;
         curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | bash -x || :;
-      else
-        echo "Coverity scan is not run";
       fi;
 
     else
