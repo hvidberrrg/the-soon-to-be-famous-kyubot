@@ -6,6 +6,11 @@ jdk:
 before_install:
   - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-certificates.crt
 
+# Avoid Sonar "shallow clone" warnings (Shallow clone detected during the analysis. Some files will miss SCM information.
+# This will affect features like auto-assignment of issues. Please configure your build to disable shallow clone.)
+git:
+  depth: 99999
+
 addons:
   sonarcloud:
       organization: "hvidberrrg-github"
