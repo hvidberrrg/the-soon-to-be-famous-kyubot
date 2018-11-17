@@ -19,7 +19,7 @@ public class PropertiesUtil {
         } else {
             Properties properties = new Properties();
             try (InputStream resourceStream = loader.getResourceAsStream(propertyFile)) {
-                logger.info("Loading properties from '" + propertyFile + "'");
+                logger.info(() -> "Loading properties from '" + propertyFile + "'");
                 properties.load(resourceStream);
             } catch (IOException e) {
                 logger.severe("Could not load properties from '" + propertyFile + "' - " + e);

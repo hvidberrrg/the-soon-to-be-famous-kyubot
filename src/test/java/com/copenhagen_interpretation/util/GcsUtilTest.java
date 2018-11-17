@@ -43,7 +43,7 @@ public class GcsUtilTest extends AbstractGuiceInjector {
 
     @Test
     public void testReadContentString() throws IOException {
-        gcsUtil.saveContent(new ByteArrayInputStream(CONTENT.getBytes(StandardCharsets.UTF_8)), FILENAME);
+        gcsUtil.saveContent(CONTENT, FILENAME);
         assertEquals(CONTENT, gcsUtil.readContentString(FILENAME));
     }
 }
