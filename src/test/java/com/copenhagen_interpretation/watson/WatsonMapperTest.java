@@ -1,11 +1,9 @@
 package com.copenhagen_interpretation.watson;
 
 import com.copenhagen_interpretation.guice.AbstractGuiceInjector;
-import com.copenhagen_interpretation.util.TestUtil;
 import com.copenhagen_interpretation.watson.model.WatsonMessage;
 import com.copenhagen_interpretation.watson.model.WatsonReply;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.inject.Inject;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,11 +24,6 @@ public class WatsonMapperTest extends AbstractGuiceInjector {
     private static String CONTEXT_FILE = "/com/copenhagen_interpretation/watson/watsonMapperTest/context.json";
     private static String REPLY_FILE = "/com/copenhagen_interpretation/watson/watsonMapperTest/watsonReply.json";
     private static String INPUT_TEXT = "Input text";
-
-    @Inject
-    private TestUtil testUtil;
-    @Inject
-    private WatsonMapper watsonMapper;
 
     @Mock
     private HttpServletRequest mockHttpServletRequest;

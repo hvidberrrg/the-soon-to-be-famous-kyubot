@@ -10,7 +10,11 @@ public final class TestUtil {
 
     public String getFileContents(String filePath) throws IOException {
         URL url = this.getClass().getResource(filePath);
-        File contextFile = new File(url.getFile());
-        return new String(Files.readAllBytes(contextFile.toPath()), StandardCharsets.UTF_8.name());
+        if (url == null) {
+            return "getResource returned null";
+        } else {
+            File contextFile = new File(url.getFile());
+            return new String(Files.readAllBytes(contextFile.toPath()), StandardCharsets.UTF_8.name());
+        }
     }
 }

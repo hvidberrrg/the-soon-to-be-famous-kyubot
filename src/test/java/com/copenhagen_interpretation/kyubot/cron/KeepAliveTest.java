@@ -2,12 +2,9 @@ package com.copenhagen_interpretation.kyubot.cron;
 
 import com.copenhagen_interpretation.guice.AbstractGuiceInjector;
 import com.copenhagen_interpretation.util.GcsUtil;
-import com.copenhagen_interpretation.util.TestUtil;
 import com.copenhagen_interpretation.watson.WatsonAssistant;
-import com.copenhagen_interpretation.watson.WatsonMapper;
 import com.copenhagen_interpretation.watson.model.WatsonMessage;
 import com.copenhagen_interpretation.watson.model.WatsonReply;
-import com.google.inject.Inject;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,13 +23,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class KeepAliveTest extends AbstractGuiceInjector {
-    @Inject
-    private KeepAlive keepAlive;
-    @Inject
-    TestUtil testUtil;
-    @Inject
-    WatsonMapper watsonMapper;
-
     @Mock
     private GcsUtil mockGcsUtil;
     @Mock

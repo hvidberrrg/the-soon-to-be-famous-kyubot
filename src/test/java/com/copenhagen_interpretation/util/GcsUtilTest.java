@@ -3,7 +3,6 @@ package com.copenhagen_interpretation.util;
 import com.copenhagen_interpretation.guice.AbstractGuiceInjector;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.google.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,8 +24,6 @@ public class GcsUtilTest extends AbstractGuiceInjector {
 
     private static final String FILENAME = "testFilename";
     private static final String CONTENT = "Test";
-
-    @Inject GcsUtil gcsUtil;
 
     @Before
     public void setup() throws Exception {

@@ -20,7 +20,7 @@ public class WatsonMapper {
     private static final ObjectMapper MAPPER;
 
     @Inject
-    Logger logger;
+    private Logger logger;
 
     static {
         MAPPER = new ObjectMapper();

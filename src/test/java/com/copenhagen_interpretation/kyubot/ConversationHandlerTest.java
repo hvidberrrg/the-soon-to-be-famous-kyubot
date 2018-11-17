@@ -4,7 +4,6 @@ import com.copenhagen_interpretation.guice.AbstractGuiceInjector;
 import com.copenhagen_interpretation.watson.WatsonAssistant;
 import com.copenhagen_interpretation.watson.WatsonMapper;
 import com.copenhagen_interpretation.watson.model.WatsonMessage;
-import com.google.inject.Inject;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,11 +22,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 public class ConversationHandlerTest extends AbstractGuiceInjector {
-    @Inject
-    private ConversationHandler conversationHandler;
-    @Inject
-    private WatsonMapper watsonMapper;
-
     @Mock
     private HttpServletRequest mockHttpServletRequest;
     @Mock
