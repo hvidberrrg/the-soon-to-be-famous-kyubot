@@ -16,7 +16,7 @@ addons:
 # https://chromium.googlesource.com/breakpad/breakpad/+/master/scripts/travis-build.sh
 # Also there is the issue of matrix explosion: https://github.com/travis-ci/travis-ci/issues/1975
 script:
-  - if [ "${COVERITY_SCAN_BRANCH}" == 1 ]; then
+  - if [ "${TRAVIS_BRANCH}" == "coverity_scan" ]; then
       echo "Skipping module tests on Coverity branch/job";
       if [ -z "${COVERITY_SCAN_TOKEN}" ]; then
         export COVERITY_SCAN_PROJECT_NAME="${TRAVIS_REPO_SLUG}";
