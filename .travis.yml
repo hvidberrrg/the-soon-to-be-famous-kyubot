@@ -7,22 +7,28 @@ before_install:
   - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-certificates.crt
 
 addons:
-  coverity_scan:
-    project:
-      name: hvidberrrg/the-soon-to-be-famous-kyubot
-      version: 1.0
-      description: The soon to be famous KyuBOT (build submitted via Travis CI)
-    notification_email: hvidberrrg@users.noreply.github.com
-    build_command_prepend: mvn clean
-    build_command: mvn -DskipTests=true verify
-    branch_pattern: coverity_scan
   sonarcloud:
       organization: "hvidberrrg-github"
       token: ${SONAR_TOKEN}
 
+# We do the Coverity Scan by hand rather than use the coverity addon. This way we can
+# ensure that COVERITY_SCAN_TOKEN is set. This approach is inspired by:
+# https://chromium.googlesource.com/breakpad/breakpad/+/master/scripts/travis-build.sh
+# Also there is the issue of matrix explosion: https://github.com/travis-ci/travis-ci/issues/1975
 script:
   - if [ "${COVERITY_SCAN_BRANCH}" == 1 ]; then
       echo "Skipping module tests on Coverity branch/job";
+      if [ -z "${COVERITY_SCAN_TOKEN}" ]; then
+        export COVERITY_SCAN_PROJECT_NAME="${TRAVIS_REPO_SLUG}";
+        export COVERITY_SCAN_NOTIFICATION_EMAIL="hvidberrrg@users.noreply.github.com";
+        export COVERITY_SCAN_BUILD_COMMAND="mvn install";
+        export COVERITY_SCAN_BUILD_COMMAND_PREPEND="mvn clean";
+        export COVERITY_SCAN_BRANCH_PATTERN="master";
+        curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | bash || :;
+      else
+        echo "Coverity scan is not run";
+      fi;
+
     else
       echo "Running script stage";
       travis_retry mvn clean verify;
