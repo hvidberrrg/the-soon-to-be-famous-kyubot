@@ -10,8 +10,4 @@ public class WatsonMessage extends AbstractObjWithContext {
     public Input getInput() {
         return input;
     }
-
-    public void setInput(Input input) {
-        this.input = input;
-    }
 }

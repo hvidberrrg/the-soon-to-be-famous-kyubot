@@ -7,14 +7,19 @@ import com.copenhagen_interpretation.watson.model.WatsonReply;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.inject.Inject;
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.when;
 
 @RunWith(BlockJUnit4ClassRunner.class)
 public class WatsonMapperTest extends AbstractGuiceInjector {
@@ -27,8 +32,17 @@ public class WatsonMapperTest extends AbstractGuiceInjector {
     @Inject
     private WatsonMapper watsonMapper;
 
+    @Mock
+    private HttpServletRequest mockHttpServletRequest;
+
+    @Before
+    public void setup() throws Exception {
+        super.setup();
+        MockitoAnnotations.initMocks(this);
+    }
+
     @Test
-    public void testRequestToQuery_EmptyContext() {
+    public void testRequestToMessage_EmptyContext() {
         WatsonMessage message = watsonMapper.requestToMessage(INPUT_TEXT, "");
 
         assertEquals(INPUT_TEXT, message.getInput().getText());
@@ -36,7 +50,7 @@ public class WatsonMapperTest extends AbstractGuiceInjector {
     }
 
     @Test
-    public void testRequestToQuery_NullContext() {
+    public void testRequestToMessage_NullContext() {
         WatsonMessage message = watsonMapper.requestToMessage(INPUT_TEXT, null);
 
         assertEquals(INPUT_TEXT, message.getInput().getText());
@@ -44,7 +58,7 @@ public class WatsonMapperTest extends AbstractGuiceInjector {
     }
 
     @Test
-    public void testRequestToQuery_WithInvalidContext() {
+    public void testRequestToMessage_WithInvalidContext() {
         WatsonMessage message = watsonMapper.requestToMessage(INPUT_TEXT, "invalidContext");
 
         assertEquals(INPUT_TEXT, message.getInput().getText());
@@ -52,10 +66,24 @@ public class WatsonMapperTest extends AbstractGuiceInjector {
     }
 
     @Test
-    public void testRequestToQuery_WithContext() throws IOException {
+    public void testRequestToMessage_WithContext() throws IOException {
         String context = testUtil.getFileContents(CONTEXT_FILE);
         WatsonMessage message = watsonMapper.requestToMessage(INPUT_TEXT, context);
+        isMessageAsExpected(message);
+    }
 
+    @Test
+    public void testHttpServletRequestToMessage() throws IOException {
+        String context = testUtil.getFileContents(CONTEXT_FILE);
+
+        when(mockHttpServletRequest.getParameter("input")).thenReturn(INPUT_TEXT);
+        when(mockHttpServletRequest.getParameter("context")).thenReturn(context);
+
+        WatsonMessage message = watsonMapper.requestToMessage(mockHttpServletRequest);
+        isMessageAsExpected(message);
+    }
+
+    private void isMessageAsExpected(WatsonMessage message) {
         assertEquals(INPUT_TEXT, message.getInput().getText());
         assertEquals("a96ec62f-773c-4e84-8be9-f9dbca9f83d0", message.getContext().get("conversation_id").asText());
         assertEquals("completed", message.getContext().get("system").get("branch_exited_reason").asText());

@@ -27,7 +27,7 @@ script:
         export COVERITY_SCAN_BUILD_COMMAND_PREPEND="mvn clean";
         export COVERITY_SCAN_BRANCH_PATTERN="${TRAVIS_BRANCH}";
         export COVERITY_SCAN_TOKEN;
-        curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | bash -x || :;
+        curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | bash || :;
       fi;
 
     else
