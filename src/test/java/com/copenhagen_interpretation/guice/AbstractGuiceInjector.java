@@ -42,7 +42,7 @@ public abstract class AbstractGuiceInjector {
     );
 
     @Before
-    public void setup() throws Exception {
+    public void setUp() throws Exception {
         injector.injectMembers(this);
     }
 

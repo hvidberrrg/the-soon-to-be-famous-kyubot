@@ -39,8 +39,8 @@ public class KeepAliveTest extends AbstractGuiceInjector {
     private static String REPLY_FILE = "/com/copenhagen_interpretation/watson/watsonMapperTest/watsonReply.json";
 
     @Before
-    public void setup() throws Exception {
-        super.setup();
+    public void setUp() throws Exception {
+        super.setUp();
         MockitoAnnotations.initMocks(this);
         // Add mocks to KeepAlive
         KeepAlive.setGcsUtil(mockGcsUtil);

@@ -29,8 +29,8 @@ public class WatsonMapperTest extends AbstractGuiceInjector {
     private HttpServletRequest mockHttpServletRequest;
 
     @Before
-    public void setup() throws Exception {
-        super.setup();
+    public void setUp() throws Exception {
+        super.setUp();
         MockitoAnnotations.initMocks(this);
     }
 
