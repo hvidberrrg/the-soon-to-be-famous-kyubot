@@ -1,0 +1,17 @@
+{
+  "name": "kyubot_coverage",
+  "version": "0.0.1",
+  "description": "Generate JavaScript coverage report for TSTBF Kyubot using the frontend-maven-plugin",
+  "dependencies": {
+    "karma": "~3.1.3",
+    "karma-coverage": "~1.1.2",
+    "karma-jasmine": "~2.0.1",
+    "karma-phantomjs-launcher": "~1.0.4",
+    "jasmine-core": "^3.3.0",
+    "phantomjs-prebuilt": "^2.1.16"
+  },
+  "scripts": {
+    "prebuild": "npm install",
+    "build": "echo andTheBunnymen"
+  }
+}

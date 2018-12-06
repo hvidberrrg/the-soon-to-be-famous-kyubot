@@ -17,6 +17,9 @@
 
         <jasmine.targetDir>jasmine</jasmine.targetDir>
         <jasmine.specRunner>SpecRunner.html</jasmine.specRunner>
+
+        <sonar.javascript.coveragePlugin>lcov</sonar.javascript.coveragePlugin>
+        <sonar.javascript.lcov.reportPaths>target/jasmine/coverage/report-lcovonly.txt</sonar.javascript.lcov.reportPaths>
     </properties>
 
     <dependencies>
@@ -148,7 +151,8 @@
                 <version>2.22.1</version>
             </plugin>
 
-           <plugin>
+            <!-- Run JavaScript unit tests -->
+            <plugin>
                <groupId>com.github.searls</groupId>
                <artifactId>jasmine-maven-plugin</artifactId>
                <version>3.0-alpha-01</version>
@@ -160,7 +164,7 @@
                     </execution>
                 </executions>
                <configuration>
-                   <debug>true</debug>
+                   <!-- <debug>true</debug> -->
                    <jsSrcDir>${project.basedir}/src/main/webapp/js</jsSrcDir>
                    <jsTestSrcDir>${project.basedir}/src/test/webapp/js</jsTestSrcDir>
                    <preloadSources>
@@ -173,6 +177,75 @@
                        </context>
                    </additionalContexts>
                </configuration>
+            </plugin>
+
+            <!-- JavaScript test coverage -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.6</version>
+                <configuration>
+                    <installDirectory>${project.build.directory}</installDirectory>
+                    <!-- <workingDirectory>jsCoverage</workingDirectory> -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
+                            <nodeVersion>v8.11.1</nodeVersion>
+                            <npmVersion>5.6.0</npmVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm run build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>javascript tests</id>
+                        <goals>
+                            <goal>karma</goal>
+                        </goals>
+                        <phase>test</phase>
+                        <configuration>
+                            <!-- optional: the default is "karma.conf.js" in your working directory -->
+                            <karmaConfPath>src/test/webapp/karma.conf.ci.js</karmaConfPath>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Replace the absolute paths in the LCOV report with relative ones (for SonarCloud) -->
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.3</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <file>${project.build.directory}/${jasmine.targetDir}/coverage/report-lcovonly.txt</file>
+                    <regex>false</regex> <!-- needed for Windows paths (as they use "\") -->
+                    <replacements>
+                        <replacement>
+                            <token>SF:${project.basedir}</token>
+                            <value>SF:.</value>
+                        </replacement>
+                    </replacements>
+                </configuration>
             </plugin>
 
         </plugins>

@@ -1,5 +1,7 @@
 .idea/
 *.iml
-cov-int
+cov-int/
+node_modules/
+package-lock.json
 src/main/webapp/WEB-INF/classes/assistant.properties
 target/
