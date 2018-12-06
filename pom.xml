@@ -194,6 +194,7 @@
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
+                        <phase>test</phase>
                         <configuration>
                             <!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
                             <nodeVersion>v8.11.1</nodeVersion>
@@ -205,6 +206,7 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
+                        <phase>test</phase>
                         <configuration>
                             <arguments>run build</arguments>
                         </configuration>
@@ -238,6 +240,7 @@
                 </executions>
                 <configuration>
                     <file>${project.build.directory}/${jasmine.targetDir}/coverage/report-lcovonly.txt</file>
+                    <ignoreMissingFile>true</ignoreMissingFile>
                     <regex>false</regex> <!-- needed for Windows paths (as they use "\") -->
                     <replacements>
                         <replacement>
