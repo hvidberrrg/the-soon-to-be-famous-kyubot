@@ -1,11 +1,13 @@
 describe('KyuBOT Jasmine unit tests', function () {
     var kyubot;
     var scrollHeight;
+    var conversationUrl;
 
     // Initialize the kyubot
     beforeAll(function () {
         kyubot = new Kyubot();
         scrollHeight = 10000;
+        conversationUrl = "/conversation";
     });
 
     // Add an element to render into
@@ -42,7 +44,7 @@ describe('KyuBOT Jasmine unit tests', function () {
     it('add message to conversation', function () {
         var type = "messageType";
         var content = "messageContent";
-        spyOn(kyubot, "scrollToBottom")
+        spyOn(kyubot, "scrollToBottom");
         kyubot.addMessage(type, content);
 
         var addedContent = $(".messages").find(".message").find("." + type).text();
@@ -53,7 +55,7 @@ describe('KyuBOT Jasmine unit tests', function () {
     });
 
     it('add typing indicator', function () {
-        spyOn(kyubot, "scrollToBottom")
+        spyOn(kyubot, "scrollToBottom");
         kyubot.addTypingIndicator();
 
         console.log("Added typing indicator");
@@ -75,13 +77,54 @@ describe('KyuBOT Jasmine unit tests', function () {
         var context = {"test": testContext};
         var data = {"output": {"text": [reply]}, "context": context};
         spyOn(kyubot, "removeTypingIndicator");
-        spyOn(kyubot, "addMessage")
-
+        spyOn(kyubot, "addMessage");
         kyubot.updateConversation(data);
 
         console.log("Updated conversation");
         expect($("#watson_context").attr("value")).toBe(JSON.stringify(context));
         expect(kyubot.removeTypingIndicator).toHaveBeenCalled();
         expect(kyubot.addMessage).toHaveBeenCalledWith("kyubot", reply);
+    });
+
+    it ('post to conversation', function() {
+        spyOn(kyubot, "post");
+        kyubot.postToConversation("userInput");
+
+        console.log("Posted to conversation");
+        // Should test on the exact callback function but get a mismatch - hence 'jasmine.any(Function)'
+        expect(kyubot.post).toHaveBeenCalledWith(conversationUrl, "userInput", jasmine.any(Function));
+    });
+
+    it('ajax post', function () {
+        jasmine.Ajax.install();
+        jasmine.Ajax.stubRequest(/.*\/conversation.*/, /.*/, "POST").andReturn({
+            "status": 200,
+            "contentType": "application/json",
+            "responseText": {"output": {"text": ["reply"]}, "context": "context"}
+        });
+        var callback = function (data) {
+            kyubot.updateConversation(data);
+        };
+        spyOn(kyubot, "updateConversation");
+        kyubot.post(conversationUrl, "testData", callback());
+
+        console.log("Performed AJAX post");
+        var request = jasmine.Ajax.requests.mostRecent();
+        expect(request.url).toBe(conversationUrl);
+        expect(request.method).toBe("POST");
+        expect(request.params).toBe("testData");
+        expect(kyubot.updateConversation).toHaveBeenCalled();
+
+        jasmine.Ajax.uninstall();
+    });
+
+    it('initiate conversation', function() {
+        spyOn(kyubot, "addTypingIndicator");
+        spyOn(kyubot, "postToConversation");
+        kyubot.initiateConversation();
+
+        console.log("Initiating conversation");
+        expect(kyubot.addTypingIndicator).toHaveBeenCalled();
+        expect(kyubot.postToConversation).toHaveBeenCalledWith("");
     });
 });

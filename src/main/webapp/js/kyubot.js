@@ -1,26 +1,20 @@
 // Define the KyuBOT class
 var Kyubot = (function () {
+    var conversationUrl = "/conversation";
 
     // Constructor
-    function Kyubot() {
-    }
+    function Kyubot() {}
 
     // Initialize the conversation with the KyuBOT
-    Kyubot.prototype.initiateConversation = function () {
+    Kyubot.prototype.initiateConversation = function() {
         // Indicate that the KyuBOT is preparing a reply
         this.addTypingIndicator();
         // Initiate the conversation with the KyuBOT
-        var me = this;
-        $.post("/conversation",
-            function (data) {
-                me.updateConversation(data);
-            }
-        );
+        this.postToConversation("");
     };
 
     // Submit messages to the KyuBOT
-    Kyubot.prototype.submitQueryToKyubot = function (form, event) {
-        var url = form.attr('action');
+    Kyubot.prototype.submitQueryToWatson = function(form, event) {
         // serializes the form's elements before clearing the input
         var formData = form.serialize();
 
@@ -35,21 +29,34 @@ var Kyubot = (function () {
             this.addTypingIndicator();
 
             // Get the KyuBOT's reply and update the conversation
-            var me = this;
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: formData,
-                success: function (data) {
-                    me.updateConversation(data);
-                }
-            });
+            this.postToConversation(formData);
         }
         event.preventDefault(); // avoid to execute the actual submit of the form.
     };
 
+    // Post a new query to Watson and add the reply to the conversation
+    Kyubot.prototype.postToConversation = function(userInput) {
+        // define callback
+        var me = this;
+        var onConversationSuccess = function(data) {
+            me.updateConversation(data);
+        };
+        // perform ajax post
+        this.post(conversationUrl, userInput, onConversationSuccess);
+    };
+
+    // Perform ajax post
+    Kyubot.prototype.post = function(url, data, onSuccess) {
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: onSuccess
+        });
+    };
+
     // Update the conversation with the reply received from the KyuBOT
-    Kyubot.prototype.updateConversation = function (data) {
+    Kyubot.prototype.updateConversation = function(data) {
         // Store the Watson context
         $('#watson_context').val(JSON.stringify(data.context));
         // Remove the animation indicating that the KyuBOT is "typing"
