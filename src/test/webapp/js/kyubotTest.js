@@ -1,13 +1,11 @@
 describe('KyuBOT Jasmine unit tests', function () {
     var kyubot;
     var scrollHeight;
-    var conversationUrl;
 
     // Initialize the kyubot
     beforeAll(function () {
         kyubot = new Kyubot();
         scrollHeight = 10000;
-        conversationUrl = "/conversation";
     });
 
     // Add an element to render into
@@ -72,50 +70,46 @@ describe('KyuBOT Jasmine unit tests', function () {
     });
 
     it('update conversation', function () {
-        var testContext = "test context to be stored";
-        var reply = "reply to add to the conversation";
-        var context = {"test": testContext};
-        var data = {"output": {"text": [reply]}, "context": context};
         spyOn(kyubot, "removeTypingIndicator");
         spyOn(kyubot, "addMessage");
-        kyubot.updateConversation(data);
+        kyubot.updateConversation(kyubotResponse);
 
         console.log("Updated conversation");
-        expect($("#watson_context").attr("value")).toBe(JSON.stringify(context));
+        expect($("#watson_context").attr("value")).toBe(JSON.stringify(kyubotContext));
         expect(kyubot.removeTypingIndicator).toHaveBeenCalled();
-        expect(kyubot.addMessage).toHaveBeenCalledWith("kyubot", reply);
+        expect(kyubot.addMessage).toHaveBeenCalledWith("kyubot", kyubotReply);
     });
 
-    it ('post to conversation', function() {
-        spyOn(kyubot, "post");
+    it('post to conversation', function() {
+        installAjaxMock();
+        spyOn(kyubot, "post").and.callThrough();
+        spyOn(kyubot, "updateConversation").and.callThrough();
         kyubot.postToConversation("userInput");
 
-        console.log("Posted to conversation");
-        // Should test on the exact callback function but get a mismatch - hence 'jasmine.any(Function)'
+        var addedReply = $(".messages").find(".message").find(".kyubot").text();
+        console.log("Posted '" + addedReply + "' to conversation");
+        // Should test on the exact callback function but get a mismatch - hence 'jasmine.any(Function)'...
         expect(kyubot.post).toHaveBeenCalledWith(conversationUrl, "userInput", jasmine.any(Function));
+        // ... instead, ensure the callback has been executed as expected.
+        expect(kyubot.updateConversation).toHaveBeenCalledWith(kyubotResponse);
+        expect(addedReply).toBe(kyubotReply);
+
+        uninstallAjaxMock();
     });
 
     it('ajax post', function () {
-        jasmine.Ajax.install();
-        jasmine.Ajax.stubRequest(/.*\/conversation.*/, /.*/, "POST").andReturn({
-            "status": 200,
-            "contentType": "application/json",
-            "responseText": {"output": {"text": ["reply"]}, "context": "context"}
-        });
-        var callback = function (data) {
-            kyubot.updateConversation(data);
-        };
-        spyOn(kyubot, "updateConversation");
-        kyubot.post(conversationUrl, "testData", callback());
+        installAjaxMock();
+        var callbackSpy = jasmine.createSpy("callback")
+        kyubot.post(conversationUrl, "testData", callbackSpy);
 
         console.log("Performed AJAX post");
         var request = jasmine.Ajax.requests.mostRecent();
         expect(request.url).toBe(conversationUrl);
         expect(request.method).toBe("POST");
         expect(request.params).toBe("testData");
-        expect(kyubot.updateConversation).toHaveBeenCalled();
+        expect(callbackSpy).toHaveBeenCalled();
 
-        jasmine.Ajax.uninstall();
+        uninstallAjaxMock();
     });
 
     it('initiate conversation', function() {
