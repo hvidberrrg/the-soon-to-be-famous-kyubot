@@ -27,7 +27,7 @@ describe('KyuBOT Event Handler Tests', function () {
         uninstallAjaxMock();
     });
 
-    it('document ready event', function (done) {
+    xit('document ready event', function (done) {
         // Define the 'initiateConversation' spy
         spyOn(kyubot, "initiateConversation");
 
@@ -39,7 +39,7 @@ describe('KyuBOT Event Handler Tests', function () {
         }, 100);
     });
 
-    it('submit form', function () {
+    xit('submit form', function () {
         // Define the 'submitQueryToWatson' spy
         spyOn(kyubot, "submitQueryToWatson");
         // .. and prepare a submit event that prevents the default form behaviour
