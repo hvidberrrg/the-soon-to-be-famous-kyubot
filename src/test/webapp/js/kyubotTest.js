@@ -124,4 +124,43 @@ describe('KyuBOT Unit Tests', function () {
         expect(localKyubot.addTypingIndicator).toHaveBeenCalled();
         expect(localKyubot.postToConversation).toHaveBeenCalledWith("");
     });
+
+    it('submit query to watson', function() {
+        var testInput = "some input string";
+        $("#inputText").val(testInput);
+        var form = $("#kyubotQuery");
+        var formData = form.serialize();
+        var event = $.Event("submit");
+
+        spyOn(localKyubot, "addMessage");
+        spyOn(localKyubot, "addTypingIndicator");
+        spyOn(localKyubot, "postToConversation");
+        spyOn(event, "preventDefault");
+
+        localKyubot.submitQueryToWatson(form, event);
+        console.log("Submitted query to Watson");
+        expect(localKyubot.addMessage).toHaveBeenCalledWith("user", testInput);
+        expect(localKyubot.addTypingIndicator).toHaveBeenCalled();
+        expect(localKyubot.postToConversation).toHaveBeenCalledWith(formData);
+        expect(event.preventDefault).toHaveBeenCalled();
+    });
+
+    it('Do not submit empty query to watson', function() {
+        var testInput = "";
+        $("#inputText").val(testInput);
+        var form = $("#kyubotQuery");
+        var event = $.Event("submit");
+
+        spyOn(localKyubot, "addMessage");
+        spyOn(localKyubot, "addTypingIndicator");
+        spyOn(localKyubot, "postToConversation");
+        spyOn(event, "preventDefault");
+
+        localKyubot.submitQueryToWatson(form, event);
+        console.log("Submitted query to Watson");
+        expect(localKyubot.addMessage).not.toHaveBeenCalled();
+        expect(localKyubot.addTypingIndicator).not.toHaveBeenCalled();
+        expect(localKyubot.postToConversation).not.toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+    });
 });
