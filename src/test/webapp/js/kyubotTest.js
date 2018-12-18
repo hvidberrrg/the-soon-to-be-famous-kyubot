@@ -3,31 +3,15 @@ describe('KyuBOT Unit Tests', function () {
     // overwrite the instance created by 'kyubotEventHandlers.js' (and this instance is relied upon by other
     // tests (and the order in which specs are executed can't be guaranteed)).
     var localKyubot;
-    var scrollHeight;
 
-    // Initialize the kyubot
     beforeAll(function () {
+        // Initialize the kyubot
         localKyubot = new Kyubot();
-        scrollHeight = 10000;
     });
 
-    // Add an element to render into
     beforeEach(function () {
-        testElement = $('<div class="conversation">\n' +
-            '        <form class="chat" action="/conversation" method="post" id="kyubotQuery">\n' +
-            '            <div class="messages" style="height:' + scrollHeight + 'px;">&nbsp;</div>\n' +
-            '            <input type="text" id="inputText" name="input" placeholder="Enter your message here...">\n' +
-            '            <input type="hidden" id="watson_context" name="context" value="">\n' +
-            '            <input type="submit" value="Send">\n' +
-            '        </form>\n' +
-            '    </div>');
-
-        $("body").append(testElement);
-    });
-
-    // Tear down the test element
-    afterEach(function () {
-        $(".conversation").remove();
+        // Add an element to render into... jasmine.Fixtures.cleanUp() is automatically called between tests
+        fixtures.set(conversation);
     });
 
     // Perform tests
@@ -157,7 +141,7 @@ describe('KyuBOT Unit Tests', function () {
         spyOn(event, "preventDefault");
 
         localKyubot.submitQueryToWatson(form, event);
-        console.log("Submitted query to Watson");
+        console.log("Didn't submitted empty query to Watson");
         expect(localKyubot.addMessage).not.toHaveBeenCalled();
         expect(localKyubot.addTypingIndicator).not.toHaveBeenCalled();
         expect(localKyubot.postToConversation).not.toHaveBeenCalled();
