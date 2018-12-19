@@ -12,34 +12,40 @@ import com.copenhagen_interpretation.watson.client.SimpleHttpClient;
 import com.google.inject.*;
 import org.junit.Before;
 
-public abstract class AbstractGuiceInjector {
+import java.util.Collection;
+
+public abstract class AbstractGuiceInjector extends ServletContextListener {
     // Inject dependencies needed by tests
     @Inject
-    public ClientConfig clientConfig;
+    protected ClientConfig clientConfig;
     @Inject
-    public GcsUtil gcsUtil;
+    protected GcsUtil gcsUtil;
     @Inject
-    public PropertiesUtil propertiesUtil;
+    protected PropertiesUtil propertiesUtil;
     @Inject
-    public SimpleHttpClient simpleHttpClient;
+    protected SimpleHttpClient simpleHttpClient;
     @Inject
-    public WatsonAssistant watsonAssistant;
+    protected WatsonAssistant watsonAssistant;
     @Inject
-    public WatsonMapper watsonMapper;
+    protected WatsonMapper watsonMapper;
     @Inject
-    public TestUtil testUtil;
+    protected TestUtil testUtil;
 
     // Servlet injection
     @Inject
-    public ConversationHandler conversationHandler;
+    protected ConversationHandler conversationHandler;
     @Inject
-    public KeepAlive keepAlive;
+    protected KeepAlive keepAlive;
 
-    protected Injector injector = Guice.createInjector(
-            new GuiceTestModule(),
-            new KyubotModule(),
-            new KyubotServletModule()
-    );
+    @Override
+    protected Collection<Module> getModules() {
+        Collection<Module> modules = super.getModules();
+        modules.add(new GuiceTestModule());
+
+        return  modules;
+    }
+
+    private Injector injector = getInjector();
 
     @Before
     public void setUp() throws Exception {
