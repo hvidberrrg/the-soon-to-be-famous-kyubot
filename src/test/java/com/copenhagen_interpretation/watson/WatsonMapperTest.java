@@ -66,6 +66,16 @@ public class WatsonMapperTest extends AbstractGuiceInjector {
     }
 
     @Test
+    public void testRequestToMessage_WithExptyRequest() throws IOException {
+        when(mockHttpServletRequest.getParameter("input")).thenReturn(null);
+        when(mockHttpServletRequest.getParameter("context")).thenReturn(null);
+
+        WatsonMessage message = watsonMapper.requestToMessage(mockHttpServletRequest);
+        assertNull(message.getInput().getText());
+        assertNull(message.getContext());
+    }
+
+    @Test
     public void testHttpServletRequestToMessage() throws IOException {
         String context = testUtil.getFileContents(CONTEXT_FILE);
 
