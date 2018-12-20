@@ -9,15 +9,12 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 public class ClientConfig {
-    @Inject
-    private Logger logger;
-
     private String credentials;
     private String url;
     private String terminateOnAction;
 
     @Inject
-    public ClientConfig(PropertiesUtil propertiesUtil) {
+    public ClientConfig(PropertiesUtil propertiesUtil, Logger logger) {
         Properties assistantProps = propertiesUtil.getProperties("assistant.properties");
         if (assistantProps == null) {
             this.credentials = null;
