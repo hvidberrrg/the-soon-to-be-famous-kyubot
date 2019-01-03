@@ -129,7 +129,7 @@ describe('KyuBOT Unit Tests', function () {
         expect(event.preventDefault).toHaveBeenCalled();
     });
 
-    it('Do not submit empty query to watson', function() {
+    it('do not submit empty query to watson', function() {
         var testInput = "";
         $("#inputText").val(testInput);
         var form = $("#kyubotQuery");
@@ -147,4 +147,35 @@ describe('KyuBOT Unit Tests', function () {
         expect(localKyubot.postToConversation).not.toHaveBeenCalled();
         expect(event.preventDefault).toHaveBeenCalled();
     });
+
+    it('display overlay', function(done) {
+        var event = $.Event("click");
+        spyOn(event, "preventDefault");
+        spyOn($.fn, "load").and.callThrough();
+        spyOn($.fn, "fadeIn").and.callThrough();
+        spyOn($.fn, "scrollTop").and.callThrough();
+
+        localKyubot.displayOverlay(event, overlayUrl);
+        // Wait for 'displayOverlay' to be done (as it uses an asynchronous callback to display the overlay after the url is loaded)
+        setTimeout(function() {
+            console.log("Displayed overlay");
+            var overlayContent = $("#overlay_content");
+            var overlay = $("#overlay");
+            expect(event.preventDefault).toHaveBeenCalled();
+            expect(overlayContent.load).toHaveBeenCalledWith(overlayUrl, jasmine.any(Function));
+            expect(overlay.fadeIn).toHaveBeenCalledWith(300);
+            expect(overlay.scrollTop).toHaveBeenCalledWith(0);
+            done();
+        }, 100);
+    });
+
+    it('hide overlay', function() {
+        spyOn($.fn, "fadeOut");
+
+        localKyubot.hideOverlay();
+        console.log("Hid overlay");
+        var overlay = $("#overlay");
+        expect(overlay.fadeOut).toHaveBeenCalledWith('slow');
+    });
+
 });

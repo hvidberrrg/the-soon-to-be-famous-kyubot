@@ -86,5 +86,20 @@ var Kyubot = (function () {
         $("div").remove(".typing-indicator-container");
     };
 
+    // Display/hide overlay
+    Kyubot.prototype.displayOverlay = function(event, url) {
+        event.preventDefault(); // avoid to visit the clicked link
+
+        $("#overlay_content").load(url,
+            // the following is the callback
+            function(){$("#overlay").fadeIn(300).scrollTop(0)});
+    };
+
+    Kyubot.prototype.hideOverlay = function() {
+        $("#overlay").fadeOut('slow');
+    };
+
+
+
     return Kyubot;
 }());

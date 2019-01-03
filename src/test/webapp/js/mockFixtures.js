@@ -6,6 +6,14 @@ var conversation = $('<div class="conversation">\n' +
     '            <input type="hidden" id="watson_context" name="context" value="">\n' +
     '            <input type="submit" value="Send">\n' +
     '        </form>\n' +
+    '    </div>\n' +
+    '    \n' +
+    '    <!-- Overlaid content goes here -->\n' +
+    '    <div id="overlay">\n' +
+    '        <div id="overlay_content_box">\n' +
+    '            <button id="overlay_close">×</button>\n' +
+    '            <span id="overlay_content"><!-- external content to be loaded here --></span>\n' +
+    '        </div>\n' +
     '    </div>');
 
 var fixtures = new jasmine.getFixtures();
