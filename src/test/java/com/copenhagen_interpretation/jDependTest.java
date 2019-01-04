@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 
 public class jDependTest {
     private static final String PACKAGE_PREFIX = "com.copenhagen_interpretation";
-    private static final int EXPECTED_NO_OF_PACKAGES = 7;
+    private static final int EXPECTED_NO_OF_PACKAGES = 8;
     private JDepend jDepend;
 
     @Before
@@ -28,6 +28,7 @@ public class jDependTest {
     @Test
     public void testPackageDependencyConstraints() {
         DependencyConstraint constraint = new DependencyConstraint();
+        JavaPackage content = constraint.addPackage(PACKAGE_PREFIX + ".content");
         JavaPackage guice = constraint.addPackage(PACKAGE_PREFIX + ".guice");
         JavaPackage kyubot = constraint.addPackage(PACKAGE_PREFIX + ".kyubot");
         JavaPackage kyubot_cron = constraint.addPackage(PACKAGE_PREFIX + ".kyubot.cron");
@@ -36,8 +37,8 @@ public class jDependTest {
         JavaPackage watson_client = constraint.addPackage(PACKAGE_PREFIX + ".watson.client");
         JavaPackage watson_model = constraint.addPackage(PACKAGE_PREFIX + ".watson.model");
 
-        guice.dependsUpon(kyubot, kyubot_cron, util, watson, watson_client);
-        kyubot.dependsUpon(watson, watson_model);
+        guice.dependsUpon(content, kyubot, kyubot_cron, util, watson, watson_client);
+        kyubot.dependsUpon(content, watson, watson_model);
         kyubot_cron.dependsUpon(util, watson, watson_model);
         watson_client.dependsUpon(util);
         watson.dependsUpon(watson_client, watson_model);

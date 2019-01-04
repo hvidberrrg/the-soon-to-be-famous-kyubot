@@ -1,5 +1,7 @@
 package com.copenhagen_interpretation.guice;
 
+import com.copenhagen_interpretation.content.ContentHandlerUtil;
+import com.copenhagen_interpretation.kyubot.ContentHandler;
 import com.copenhagen_interpretation.kyubot.ConversationHandler;
 import com.copenhagen_interpretation.kyubot.cron.KeepAlive;
 import com.copenhagen_interpretation.util.GcsUtil;
@@ -19,6 +21,8 @@ public abstract class AbstractGuiceInjector extends ServletContextListener {
     @Inject
     protected ClientConfig clientConfig;
     @Inject
+    protected ContentHandlerUtil contentHandlerUtil;
+    @Inject
     protected GcsUtil gcsUtil;
     @Inject
     protected PropertiesUtil propertiesUtil;
@@ -32,6 +36,8 @@ public abstract class AbstractGuiceInjector extends ServletContextListener {
     protected TestUtil testUtil;
 
     // Servlet injection
+    @Inject
+    protected ContentHandler contentHandler;
     @Inject
     protected ConversationHandler conversationHandler;
     @Inject
