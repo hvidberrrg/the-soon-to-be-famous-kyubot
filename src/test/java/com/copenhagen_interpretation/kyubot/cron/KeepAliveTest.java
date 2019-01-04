@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.HttpURLConnection;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -52,12 +53,12 @@ public class KeepAliveTest extends AbstractGuiceInjector {
     }
 
     @Test
-    public void doPost_couldNotContactWatsonTest() throws Exception{
+    public void doPost_couldNotContactWatsonTest() {
         JSONObject error = new JSONObject().put("error", "Could not contact Watson.");
 
         when(mockWatsonAssistant.converse(any(WatsonMessage.class))).thenReturn(null);
         keepAlive.doGet(mockHttpServletRequest, mockHttpServletResponse);
-        //assertEquals(HttpURLConnection.HTTP_BAD_GATEWAY, mockHttpServletResponse.getStatus()); // TODO - inlcude when javax.servlet-api is updated to 3.1.0
+        verify(mockHttpServletResponse).setStatus(HttpURLConnection.HTTP_BAD_GATEWAY);
         assertEquals(error.toString(), servletReply.toString().trim());
     }
 
@@ -68,17 +69,17 @@ public class KeepAliveTest extends AbstractGuiceInjector {
         when(mockWatsonAssistant.converse(any(WatsonMessage.class))).thenReturn(watsonReplyString);
         doThrow(IOException.class).when(mockGcsUtil).saveContent(anyString(), anyString());
         keepAlive.doGet(mockHttpServletRequest, mockHttpServletResponse);
-        //assertEquals(HttpURLConnection.HTTP_UNAVAILABLE, mockHttpServletResponse.getStatus()); // TODO - inlcude when javax.servlet-api is updated to 3.1.0
+        verify(mockHttpServletResponse).setStatus(HttpURLConnection.HTTP_UNAVAILABLE);
         assertEquals(error.toString(), servletReply.toString().trim());
     }
 
     @Test
     public void doPost_writeFailureTest() throws Exception{
         when(mockWatsonAssistant.converse(any(WatsonMessage.class))).thenReturn(watsonReplyString);
-        doAnswer((i) -> {return null;}).when(mockGcsUtil).saveContent(anyString(), anyString());
+        doAnswer((i) -> null).when(mockGcsUtil).saveContent(anyString(), anyString());
         when(mockHttpServletResponse.getWriter()).thenThrow(new IOException("Write failure"));
         keepAlive.doGet(mockHttpServletRequest, mockHttpServletResponse);
-        //assertEquals(HttpURLConnection.HTTP_INTERNAL_ERROR, mockHttpServletResponse.getStatus()); // TODO - inlcude when javax.servlet-api is updated to 3.1.0
+        verify(mockHttpServletResponse).setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR);
         assertEquals("", servletReply.toString());
     }
 
@@ -97,10 +98,9 @@ public class KeepAliveTest extends AbstractGuiceInjector {
         WatsonReply watsonReplyFromFile = watsonMapper.jsonToReply(watsonReplyString);
 
         when(mockWatsonAssistant.converse(any(WatsonMessage.class))).thenReturn(watsonReplyString);
-        doAnswer((i) -> {return null;}).when(mockGcsUtil).saveContent(anyString(), anyString());
+        doAnswer((i) -> null).when(mockGcsUtil).saveContent(anyString(), anyString());
         keepAlive.doGet(mockHttpServletRequest, mockHttpServletResponse);
         WatsonReply watsonReply = watsonMapper.jsonToReply(servletReply.toString());
-        //assertEquals(HttpURLConnection.HTTP_OK, mockHttpServletResponse.getStatus()); // TODO - inlcude when javax.servlet-api is updated to 3.1.0
         assertEquals(watsonReplyFromFile.getOutput().getText().get(0), watsonReply.getOutput().getText().get(0));
     }
 }

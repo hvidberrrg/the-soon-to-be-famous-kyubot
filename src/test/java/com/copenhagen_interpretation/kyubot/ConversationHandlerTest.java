@@ -16,9 +16,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ConversationHandlerTest extends AbstractGuiceInjector {
@@ -55,7 +57,7 @@ public class ConversationHandlerTest extends AbstractGuiceInjector {
 
         when(mockWatsonMapper.requestToMessage(any(HttpServletRequest.class))).thenThrow(new UnsupportedEncodingException("arrrgh"));
         conversationHandler.doPost(mockHttpServletRequest, mockHttpServletResponse);
-        //assertEquals(HttpURLConnection.HTTP_UNAVAILABLE, mockHttpServletResponse.getStatus()); // TODO - inlcude when javax.servlet-api is updated to 3.1.0
+        verify(mockHttpServletResponse).setStatus(HttpURLConnection.HTTP_UNAVAILABLE);
         assertEquals(error.toString(), servletReply.toString().trim());
     }
 
@@ -66,7 +68,7 @@ public class ConversationHandlerTest extends AbstractGuiceInjector {
         when(mockWatsonMapper.requestToMessage(any(HttpServletRequest.class))).thenReturn(message);
         when(mockWatsonAssistant.converse(any(WatsonMessage.class))).thenReturn(null);
         conversationHandler.doPost(mockHttpServletRequest, mockHttpServletResponse);
-        //assertEquals(HttpURLConnection.HTTP_BAD_GATEWAY, mockHttpServletResponse.getStatus()); // TODO - inlcude when javax.servlet-api is updated to 3.1.0
+        verify(mockHttpServletResponse).setStatus(HttpURLConnection.HTTP_BAD_GATEWAY);
         assertEquals(error.toString(), servletReply.toString().trim());
     }
 
@@ -78,7 +80,7 @@ public class ConversationHandlerTest extends AbstractGuiceInjector {
         when(mockWatsonAssistant.converse(any(WatsonMessage.class))).thenReturn(testReply.toString());
         when(mockHttpServletResponse.getWriter()).thenThrow(new IOException("Write failure"));
         conversationHandler.doPost(mockHttpServletRequest, mockHttpServletResponse);
-        //assertEquals(HttpURLConnection.HTTP_INTERNAL_ERROR, mockHttpServletResponse.getStatus()); // TODO - inlcude when javax.servlet-api is updated to 3.1.0
+        verify(mockHttpServletResponse).setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR);
         assertEquals("", servletReply.toString().trim());
     }
 
@@ -89,7 +91,6 @@ public class ConversationHandlerTest extends AbstractGuiceInjector {
         when(mockWatsonMapper.requestToMessage(any(HttpServletRequest.class))).thenReturn(message);
         when(mockWatsonAssistant.converse(any(WatsonMessage.class))).thenReturn(testReply.toString());
         conversationHandler.doPost(mockHttpServletRequest, mockHttpServletResponse);
-        //assertEquals(HttpURLConnection.HTTP_OK, mockHttpServletResponse.getStatus()); // TODO - inlcude when javax.servlet-api is updated to 3.1.0
         assertEquals(testReply.toString(), servletReply.toString().trim());
     }
 }
