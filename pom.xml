@@ -45,12 +45,6 @@
         </dependency>
 
         <dependency>
-            <groupId>jstl</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>${guice.version}</version>
@@ -60,7 +54,6 @@
             <artifactId>guice-servlet</artifactId>
             <version>${guice.version}</version>
         </dependency>
-
 
         <!-- App dependencies -->
         <dependency>
