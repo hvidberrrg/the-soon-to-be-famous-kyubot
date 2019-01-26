@@ -1,6 +1,7 @@
 package com.copenhagen_interpretation.guice;
 
 import com.copenhagen_interpretation.content.ContentHandlerUtil;
+import com.copenhagen_interpretation.content.ContentMapper;
 import com.copenhagen_interpretation.util.GcsUtil;
 import com.copenhagen_interpretation.util.PropertiesUtil;
 import com.copenhagen_interpretation.watson.WatsonAssistant;
@@ -16,6 +17,7 @@ public class KyubotModule extends AbstractModule {
     protected void configure() {
         bind(ClientConfig.class).in(Scopes.SINGLETON);
         bind(ContentHandlerUtil.class).in(Scopes.SINGLETON);
+        bind(ContentMapper.class).in(Scopes.SINGLETON);
         bind(GcsUtil.class).in(Scopes.SINGLETON);
         bind(PropertiesUtil.class).in(Scopes.SINGLETON);
         bind(SimpleHttpClient.class).in(Scopes.SINGLETON);

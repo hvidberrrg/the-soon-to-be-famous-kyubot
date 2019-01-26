@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<htmlPage>
+    <description> DESCRIPTION</description>
+    <keywords>KEYWORDS </keywords>
+    <breadcrumb>BREADCRUMB</breadcrumb>
+    <title>TITLE</title>
+    <content>
+        <![CDATA[
+        <p>CONTENT</p>
+        ]]>
+    </content>
+    <notPartOfModel>TEST</notPartOfModel>
+</htmlPage>
