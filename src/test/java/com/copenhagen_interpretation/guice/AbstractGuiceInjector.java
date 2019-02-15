@@ -1,7 +1,8 @@
 package com.copenhagen_interpretation.guice;
 
-import com.copenhagen_interpretation.content.ContentHandlerUtil;
 import com.copenhagen_interpretation.content.ContentMapper;
+import com.copenhagen_interpretation.content.ContentUtil;
+import com.copenhagen_interpretation.content.Freemarker;
 import com.copenhagen_interpretation.kyubot.ContentHandler;
 import com.copenhagen_interpretation.kyubot.ConversationHandler;
 import com.copenhagen_interpretation.kyubot.cron.KeepAlive;
@@ -22,9 +23,11 @@ public abstract class AbstractGuiceInjector extends ServletContextListener {
     @Inject
     protected ClientConfig clientConfig;
     @Inject
-    protected ContentHandlerUtil contentHandlerUtil;
+    protected ContentUtil contentUtil;
     @Inject
     protected ContentMapper contentMapper;
+    @Inject
+    protected Freemarker freemarker;
     @Inject
     protected GcsUtil gcsUtil;
     @Inject

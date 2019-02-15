@@ -25,7 +25,7 @@ public class ContentMapper {
         unmarshaller = jaxbContext.createUnmarshaller();
     }
 
-    HtmlPage getHtmlPageFromURL(String url) {
+    public HtmlPage getHtmlPageFromURL(String url) {
         try {
             return (HtmlPage) unmarshaller.unmarshal(gcsUtil.readContent(url));
         } catch (IOException | JAXBException e) {

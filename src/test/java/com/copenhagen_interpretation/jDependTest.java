@@ -40,7 +40,7 @@ public class jDependTest {
 
         content.dependsUpon(content_model, util);
         guice.dependsUpon(content, kyubot, kyubot_cron, util, watson, watson_client);
-        kyubot.dependsUpon(content, watson, watson_model);
+        kyubot.dependsUpon(content, content_model, watson, watson_model);
         kyubot_cron.dependsUpon(util, watson, watson_model);
         watson_client.dependsUpon(util);
         watson.dependsUpon(watson_client, watson_model);

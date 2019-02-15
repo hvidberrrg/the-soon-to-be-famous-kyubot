@@ -8,4 +8,7 @@
         <property name="appengine.api.urlfetch.defaultDeadline" value="30"/>
         <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
     </system-properties>
+    <resource-files>
+        <include path="/**.ftlh" />
+    </resource-files>
 </appengine-web-app>

@@ -79,6 +79,12 @@
             <version>20180130</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.28</version>
+        </dependency>
+
         <!-- Test Dependencies -->
         <dependency>
             <groupId>junit</groupId>
@@ -250,6 +256,29 @@
                         </replacement>
                     </replacements>
                 </configuration>
+            </plugin>
+
+            <!-- SourceClear scan: mvn clean compile com.srcclr:srcclr-maven-plugin:scan
+                 (The environment variable SRCCLR_API_TOKEN must be set) -->
+            <plugin>
+                <groupId>com.srcclr</groupId>
+                <artifactId>srcclr-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <upload>true</upload>
+                    <verbose>false</verbose>
+                </configuration>
+                <!--
+                <executions>
+                    <execution>
+                        <id>srcclr-scan</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>scan</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                -->
             </plugin>
 
         </plugins>

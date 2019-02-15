@@ -1,10 +1,9 @@
 package com.copenhagen_interpretation.content;
 
-public class ContentHandlerUtil {
+public class ContentUtil {
 
     public boolean isValidUrl(String url) {
         boolean valid = false;
-        url = normalizeUrl(url);
         for (SupportedContentTypes contentType : SupportedContentTypes.values()) {
             if (url.endsWith(contentType.extension())) {
                 valid = true;
