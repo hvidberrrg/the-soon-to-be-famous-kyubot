@@ -51,7 +51,7 @@ public class Freemarker {
             }
             return configuration.getTemplate(templateName);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.severe("Failed to get template '" + templateName + "' - " + e);
             return null;
         }
     }
